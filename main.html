@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>BOM Comments Tool</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="content.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+
+  <script>
+    $(document).ready(function () {
+      $("#tabs").tabs({ active: 'favorite-notes' });
+    });
+  </script>
+</head>
+
+<body>
+  <div id="topNavBar">
+    <!--TOP NAV BAR-->
+    <h1 id="navBarLabel" style="justify-content: flex-start;">Favorites</h1>
+    <button id="clearFields" onclick="clearActiveFields()">
+      <span class="material-icons">
+        backspace
+      </span>
+    </button>
+  </div>
+
+  <div id="tabs">
+    <div id="favorite-notes" class="favorite-notes-content">
+      <!--COMMON NOTES-->
+      <div class="page-header">COMMON NOTES</div>
+      <div id="widgetHolder" style="display: none;">
+        <!--NO STOCK-->
+        <div id="nsk" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              remove_shopping_cart
+            </span>
+            <h2>No Stock</h2>
+            <button class="copy-button" onclick="onNoStockCopyClick(noStockInput, customer)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <input id="noStockInput" placeholder="Reason pricing N/A (if app)" class="stacked-input">
+        </div>
+        <!--EU STOCK-->
+        <div id="eus" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              euro
+            </span>
+            <h2 id="euLeadTimeLabel">EU Stock with 15d LT</h2>
+            <button class="copy-button" onclick="onEUStockCopyClick(euLeadTime)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+        </div>
+        <!--P/N NOT FOUND-->
+        <div id="pnf" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              search_off
+            </span>
+            <h2>P/N Not Found</h2>
+            <button class="copy-button" onclick="onPNNotFoundCopyClick()">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+        </div>
+        <!--QUOTED WITH ALT-->
+        <div id="qwa" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              alt_route
+            </span>
+            <h2>Quoted With Alternate</h2>
+            <button class="copy-button" onclick="onQuotedAltClick(altMFRName, altMFRPN)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <input id="altMFRPN" placeholder="MFR P/N" class="stacked-input">
+          <input id="altMFRName" placeholder="MFR Name" class="stacked-input">
+        </div>
+        <!--LOW STOCK-->
+        <div id="lst" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              production_quantity_limits
+            </span>
+            <h2>Low Stock</h2>
+            <input id="lowStock" placeholder="Stock" class="inline-input" style="width: 7.5em;">
+            <button class="copy-button" onclick="onLowStockClick(lowStock)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+        </div>
+        <!--SPEC MISMATCH-->
+        <div id="sbm" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              compare_arrows
+            </span>
+            <h2>Spec/BOM Desc Mismatch</h2>
+            <button class="copy-button" onclick="onSpecMismatchClick(specDesc, listedSpec, bomDesc)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <input id="specDesc" placeholder="Spec Description" class="stacked-input">
+          <div class="inline-input-parent">
+            <input id="listedSpec" placeholder="Listed Spec" class="stacked-input"
+              style="width:50%; margin-right: .125em;">
+            <input id="bomDesc" placeholder="BOM Desc" class="stacked-input" style="width:50%; margin-left:.125em;">
+          </div>
+        </div>
+        <!--SOURCING PARTIAL STOCK-->
+        <div id="srp" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              data_saver_off
+            </span>
+            <h2>Sourcing Partial Stock</h2>
+            <button class="copy-button" onclick="onSourcingPartialClick(sourceableQTY, higherQTYLT)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <div class="inline-input-parent">
+            <input id="sourceableQTY" placeholder="Build QTY" class="stacked-input"
+              style="width:50%; margin-right: .125em;">
+            <input id="higherQTYLT" placeholder="LT in weeks" class="stacked-input" style="width:50%; margin-left:.125em;">
+          </div>
+        </div>
+        <!--STOCK WITH LEAD TIME-->
+        <div id="swl" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              schedule
+            </span>
+            <h2>Stock With LT</h2>
+            <input id="stockWithLeadTime" placeholder="Date/LT" class="inline-input" style="width: 6em;">
+            <button class="copy-button" onclick="onStockWithLeadTimeClick(stockWithLeadTime)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+
+        </div>
+        <!--PACKAGING DISCREPANCY-->
+        <div id="pkd" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              mail
+            </span>
+            <h2>Packaging Discrepancy</h2>
+            <button class="copy-button" onclick="onPackagingDiscrepancyClick(charDiscrepancy,oldPackage,newPackage)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <div class="inline-input-parent">
+            <input id="charDiscrepancy" placeholder="Difference" class="stacked-input"
+              style="width:20%; margin-right: 2px;">
+            <select id="oldPackage" name="packageType" id="packageType" style="width: 40%; margin: unset .125em;">
+              <option value="">listed</option>
+              <option value="Tape and Reel">T+R</option>
+              <option value="Cut Tape">Tape</option>
+              <option value="Tray">Tray</option>
+              <option value="Tube">Tube</option>
+            </select>
+            <select id="newPackage" name="packageType" id="packageType" style="width: 40%; margin-left: .125em;">
+              <option value="">act.</option>
+              <option value="Tape and Reel">T+R</option>
+              <option value="Cut Tape">Tape</option>
+              <option value="Tray">Tray</option>
+              <option value="Tube">Tube</option>
+            </select>
+          </div>
+        </div>
+        <!--QUOTED AS SUPPLIED-->
+        <div id="qas" style="display: inherit;">
+
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              money_off
+            </span>
+            <h2>Quoted as Supplied</h2>
+            <button class="copy-button" onclick="onQuotedAsSuppliedClick(quotedAsSupplied, customer.value)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <input id="quotedAsSupplied" placeholder="Reason Cost N/A" class="stacked-input">
+        </div>
+        <!--QUOTED WITH INVENTORY-->
+        <div id="qwi" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              inventory_2
+            </span>
+            <h2>Quoted With Inventory</h2>
+            <button class="copy-button" onclick="onQuotedWithInventoryClick(inventoryID)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <input id="inventoryID" placeholder="Inventory Location" class="stacked-input">
+        </div>
+        <!--CONFIRM P/N CORRECT-->
+        <div id="cpc" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              thumb_up_alt
+            </span>
+            <h2>Confirm P/N Correct</h2>
+            <button class="copy-button" onclick="onConfirmPNCorrectClick(confirmPNCorrectInput)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+          <input id="confirmPNCorrectInput" placeholder="MFR P/N" class="stacked-input">
+        </div>
+        <!--CUSTOMER APPROVED ALT-->
+        <div id="caa" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              thumb_up_alt
+            </span>
+            <h2>Alternate Approved</h2>
+            <button class="copy-button" onclick="onAlternateApprovedClick(alternateApprovedInput)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+          <input id="alternateApprovedInput" placeholder="Note" class="stacked-input">
+        </div>
+         <!--CUSTOMER SUGGESTED ALT-->
+         <div id="afc" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              assistant
+            </span>
+            <h2>Alternate From Customer</h2>
+            <button class="copy-button" onclick="onAlternateFromCustomerClick(alternateFromCustomerInput, customer.value)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+          <input id="alternateFromCustomerInput" placeholder="Alternate P/N" class="stacked-input">
+        </div>
+        <!--CUSTOMER TO SUPPLY-->
+        <div id="cts" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              inventory_2
+            </span>
+            <h2>Customer To Supply</h2>
+            <button class="copy-button" onclick="onCustomerToSupplyClick(customer.value)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+        </div>
+
+        <!--OTHER-->
+        <div class="favorite-note-container" id="otr">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              add
+            </span>
+            <h2>Other Notes</h2>
+            <button class="copy-button" onclick="onOtherClick(otherNotesFav)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+          </div>
+          <textarea id="otherNotesFav" placeholder="(appends to new line)" class="stacked-input"></textarea>
+        </div>
+      </div>
+    </div>
+    <div id="stock-notice" class="stock-notice-content">
+      <!--STOCK NOTICE-->
+      <div class="page-header">FILL IN AS APPLICABLE</div>
+      <!--LOW STOCK-->
+      <div class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined" id="lowStockAdvIcon">
+            production_quantity_limits
+          </span>
+          <div class="adv-label">
+            <h2 id="lowStockAdvHeader">Low Stock</h2>
+            <h4 id="lowStockAdvLabel">Low (3000) stock available...</h4>
+          </div>
+          <input id="lowStockAdv" class="inline-input-adv" placeholder=" Stock"
+            oninput="updateLabels(); onAdvInputChange( lowStockAdvHeader, lowStockAdvLabel, lowStockAdvIcon)">
+        </div>
+      </div>
+      <!--BROKER PRICE-->
+      <div class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined" id="brokerPriceAdvIcon">
+            price_change
+          </span>
+          <div class="adv-label">
+            <h2 id="brokerPriceAdvHeader">Broker Price</h2>
+            <h4 id="brokerPriceAdvLabel">through int'l broker @ $45.2342</h4>
+          </div>
+          <input id="brokerPriceAdv" class="inline-input-adv" placeholder=" Price"
+            oninput="updateLabels(); onAdvInputChange(brokerPriceAdvHeader, brokerPriceAdvLabel, brokerPriceAdvIcon)">
+        </div>
+      </div>
+      <!--MPQ-->
+      <div class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined" id="mPQAdvIcon">
+            4k
+          </span>
+          <div class="adv-label">
+            <h2 id="mPQAdvHeader">MPQ</h2>
+            <h4 id="mPQAdvLabel">in increments of 3000</h4>
+          </div>
+          <input id="mPQAdv" class="inline-input-adv" placeholder=" Increments"
+            oninput="updateLabels(); onAdvInputChange(mPQAdvHeader, mPQAdvLabel, mPQAdvIcon)">
+        </div>
+      </div>
+      <!--MOQ-->
+      <div class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined" id="mOQAdvIcon">
+            1k_plus
+          </span>
+          <div class="adv-label">
+            <h2 id="mOQAdvHeader">MOQ</h2>
+            <h4 id="mOQAdvLabel">with MOQ of 10000</h4>
+          </div>
+          <input id="mOQAdv" class="inline-input-adv" placeholder=" Minimum Buy"
+            oninput="updateLabels(); onAdvInputChange(mOQAdvHeader, mOQAdvLabel, mOQAdvIcon)">
+        </div>
+      </div>
+      <!--LEAD TIME-->
+      <div class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined" id="lTAdvIcon">
+            schedule
+          </span>
+          <div class="adv-label">
+            <h2 id="lTAdvHeader">Lead Time</h2>
+            <h4 id="lTAdvLabel">and LT of 32w</h4>
+          </div>
+          <input id="lTAdv" class="inline-input-adv" placeholder=" Date/Weeks"
+            oninput="updateLabels(); onAdvInputChange(lTAdvHeader, lTAdvLabel, lTAdvIcon)">
+        </div>
+      </div>
+      <!--REQUIRES CUSTOMER APPROVAL-->
+      <div class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined">
+            check
+          </span>
+          <h2>Requires Customer Approval?</h2>
+          <label class="switch">
+            <input id="requiresApproval" type="checkbox"
+              onclick="onRequiresApprovalClick(costOption2)">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+      <!--COST INCLUSION-->
+      <div class="stock-notice-container">
+        <div class="radio-item" id="costOption1Parent">
+          <input type="radio" id="costOption1" name="costInclude" checked onclick="onRadioButtonClick()" value="">
+          <label for="costOption1">Cost included, not mentioned</label>
+        </div>
+        <div class="radio-item" id="costOption2Parent">
+          <input type="radio" id="costOption2" name="costInclude" onclick="onRadioButtonClick()"
+            value=" Cost included in quote">
+          <label for="costOption2">Cost included, mentioned</label>
+        </div>
+        <div class="radio-item" id="costOption3Parent">
+          <input type="radio" id="costOption3" name="costInclude" onclick="onRadioButtonClick()"
+            value=" No cost included in quote.">
+          <label for="costOption3">Cost not included</label>
+        </div>
+      </div>
+      <!--OTHER NOTES-->
+      <div class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined">
+            add
+          </span>
+          <h2>Other Notes</h2>
+        </div>
+        <textarea id="otherNotesAdv" placeholder=" (appends to new line)" class="stacked-input"></textarea>
+      </div>
+      <!--COPY BUTTON-->
+      <button id="copyAdv" class="copy-adv-fab" onclick="onCopyAdvClick()">
+        
+        <span class="material-icons-outlined" style="padding-right: .5em;" id="copyAdvIcon">
+          content_copy
+        </span>
+        COPY TO CLIPBOARD
+      </button>
+    </div>
+
+    <div id="settings" class="favorite-notes-content">
+      <!--SETTINGS-->
+      <div class="page-header">CONFIGURATION</div>
+      <!--INITIALS-->
+      <div class="note-header">
+        <span class="material-icons-outlined">
+          account_circle
+        </span>
+        <h2>Initials</h2>
+        <input id="initials" class="inline-input-adv" required placeholder=" Initials">
+      </div>
+      <!--CUSTOMER-->
+      <div class="note-header">
+        <span class="material-icons-outlined">
+          business
+        </span>
+        <h2>Customer</h2>
+        <input id="customer" class="inline-input-adv" required placeholder=" Customer" onchange='onCustomerChange()'>
+      </div>
+      <!--EU STOCK LEAD TIME-->
+      <div class="note-header">
+        <span class="material-icons-outlined">
+          euro
+        </span>
+        <h2>EU Lead Time</h2>
+        <input id="euLeadTime" class="inline-input-adv" required value="15" placeholder=" LT in days"
+          oninput="onEULeadTimeInput()">
+      </div>
+      <!--LOADOUT PRESETS-->
+      <div class="note-header">
+        <span class="material-icons">
+          list
+        </span>
+        <h2>Notes Loadout</h2>
+        <select name="loadout" id="notesLoadout" class="settings-select" onchange="onLoadoutPresetChange()">
+          <option value="default">Default</option>
+          <option value="mketool">MKE Tool</option>
+          <option value="embedtek">EmbedTek</option>
+          <option value="custresponse">Response</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div id="custom-config" style="width: 100%; display: none;">
+        <div class="page-header" style="margin-top: 1em; margin-bottom: .25em;">CUSTOM LOADOUT</div>
+        <div id="custom-config-wrapper"></div>
+      </div>
+    </div>
+
+
+
+    <ul id="bottomNavBar">
+      <!--BOTTOM NAV BAR-->
+      <!--COMMON NOTES-->
+      <li style="width:33%;"><a id="favorite-notes-button" class="bottom-nav-bar-item" href="#favorite-notes"
+          onclick="onTabClick(navBarLabel, 'Favorites')">
+          <span class="material-icons">
+            favorite
+          </span>
+          <div class="tab-label">Favorites</div>
+        </a></li>
+      <!--STOCK NOTICE-->
+      <li style="width:33%;"><a id="stock-notice-button" class="bottom-nav-bar-item" href="#stock-notice"
+          onclick="onTabClick(navBarLabel, 'Advanced Notes')">
+
+          <span class="material-icons">
+            error
+          </span>
+          <div class="tab-label">Stock Notice</div>
+        </a></li>
+      <!--SETTINGS-->
+      <li style="width:33%;"><a id="settings-button" class="bottom-nav-bar-item" href="#settings"
+          onclick="onTabClick(navBarLabel, 'Settings')">
+
+          <span class="material-icons">
+            settings
+          </span>
+          <div class="tab-label">Settings</div>
+        </a></li>
+    </ul>
+  </div>
+  <script src="renderer.js"></script>
+  <script src="stock-notice.js"></script>
+  <script src="favorites.js"></script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,162 @@
+  /* COLOR PALETTE
+
+BACKGROUND COLOR OPACITY
+    Hover: 4%
+    Active: 10%
+    Focus: 12%
+
+ITEM OPACITY
+    Disabled: 38%
+
+
+  */
+
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+:root {
+    --surface: white;
+    --emphasis-on-primary-high: white;
+    --emphasis-on-primary-medium: rgba(255, 255, 255, 0.74);
+    --emphasis-on-primary-disabled: rgba(255, 255, 255, 0.38);
+
+    --emphasis-on-surface-high: rgba(255, 255, 255, 0.87);
+    --emphasis-on-surface-medium: rgba(255, 255, 255, 0.60);
+    --outline-on-surface: rgba(0, 0, 0, 0.12);
+    
+    --primary:rgb(3, 169, 244);
+
+    --primary-hover: rgba(3, 169, 244, 0.04);
+    --primary-active: rgba(3, 169, 244, 0.10);
+    --primary-focus: rgba(3, 169, 244, 0.12);
+    --primary-enabled: rgba(3, 169, 244, 0);
+
+    --black-hover: rgba(0, 0, 0, 0.04);
+    --black-active: rgba(0, 0, 0, 0.10);
+    --black-focus: rgba(0, 0, 0, 0.12);
+    --black-enabled: rgba(0, 0, 0, 0);
+
+    --white-hover: rgba(255, 255, 255, 0.04);
+    --white-active: rgba(255, 255, 255, 0.10);
+    --white-focus: rgba(255, 255, 255, 0.12);
+    --white-enabled: rgba(255, 255, 255, 0);
+
+
+    --error: rgb(176, 0, 32);
+
+}
+
+
+h1 {
+    font-family: 'Work Sans';
+    font-weight: 500;
+    font-size: 1.2em;
+    color: white;
+}
+  
+body {
+  padding:0%;
+  margin: 3.5em 0em;
+  background-color: var(--surface);
+}
+
+#topNavBar {
+    position:fixed;
+    top: 0em;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 3.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin: 0em;
+    background-color: var(--primary);
+    border-width: 0em;
+}
+
+
+#clearFields {
+    margin-left: auto;
+    background-color: transparent;
+    border-radius: .3125em;
+    border-width: 0em;
+    color: white;
+    padding: .125em .5em 0em .375em;
+    
+}
+
+#clearFields:hover {
+    background-color: var(--white-hover);
+}
+#clearFields:active {
+    background-color: var(--white-focus);;
+}
+
+#bottomNavBar {
+    position:fixed;
+    bottom:0;
+    display: flex;
+    width: 100%;
+    height: 3.5em;
+    padding: 0em;
+    margin: 0em;
+    background-color: var(--primary);
+    border-width: 0em;
+}
+
+#bottomNavBar .ui-state-active > .bottom-nav-bar-item{
+    opacity: 1;
+}
+
+.bottom-nav-bar-item {
+    display:inline-block;
+    vertical-align:middle;
+    width: 100%;
+    background-color: transparent;
+    text-align: center;
+    color: white;
+    opacity: 0.6;
+    text-decoration: none;
+    border-radius: 0%;
+    border-width: 0em;
+    padding: .25em 0em;
+  }
+
+
+.bottom-nav-bar-item > div {
+    display: block;
+    font-family: 'Work Sans';
+    font-weight: 500;
+}
+
+li {
+    list-style-type: none;
+    display: flex;
+}
+
+
+.favorite-notes-content, .stock-notice-content {
+    box-sizing: border-box;
+    padding: 0em 1em;
+    padding-top: .25em;
+    width: 100%;
+    height: auto;
+}
+
+.favorite-notes-content {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 4em;
+}
+
+
+#custom-config-wrapper {
+    display:block;
+    width: 100%;
+}
+
+#custom-config-wrapper h2 {
+    font-size: 1em;
+}
+

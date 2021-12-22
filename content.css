@@ -1,0 +1,327 @@
+  /* COLOR PALETTE
+
+  Hover: 4%
+  Focus/Active: 12%
+
+
+  */
+
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+h2, h4, label {
+    font-family: 'Work Sans';
+    font-weight: 500;
+    color: black;  
+    padding-left: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+h2 {
+    font-size: .875em;
+}
+
+h4 {
+    font-size: .625em;
+}
+
+label {
+    font-size: .9375em;
+}
+
+.adv-label h2, .adv-label h4 {
+    margin: .0625em;
+}
+.adv-label h2{
+    display: block;
+}
+
+.adv-label h4 {
+    display:none;
+    word-wrap: normal;
+    white-space: normal;
+    width:calc(100%-9.5em);
+}
+
+.page-header {
+    font-family: 'Work Sans';
+    font-weight: 600;
+    font-size: .625em;
+    margin-bottom: -.25em;
+    width: 100%;
+}
+
+.favorite-note-container, .stock-notice-container {
+    padding: .5em 0em;
+    display: block;
+}
+
+.favorite-note-container {
+    width:20.5em;
+}
+.note-header {
+    display: flex;
+    align-items: center;
+    width:100%;
+}
+
+.copy-button {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    padding: .25em;
+    border-radius: .25em;
+    border-width: 0em;
+    box-sizing: border-box;
+    font-family: 'Work Sans';
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--primary);
+    background-color: var(--primary-enabled);
+}
+
+.copy-button:hover {
+    background-color: var(--primary-hover)
+}
+.copy-button:active {
+    background-color: var(--primary-active);
+}
+
+input, select, textarea {
+    border-color: var(--outline-on-surface);
+    border-style: solid;
+    border-radius: .25em;
+    border-width: .125em;
+    outline:none;
+    background-color: white;
+    box-shadow: none;
+    padding: .0625em .125em;
+    margin: .125em unset;
+}
+input, textarea {
+    font-family: "Roboto";
+    width: 12.5em;
+    font-size: 1em;
+}
+textarea {
+    height: 3.5em;
+    width: 12.5em;
+}
+
+input, select {
+    height: 1.75em;
+}
+
+select {
+    font-family: 'Work Sans';
+    font-weight: 500;
+    font-size: 1em;
+    width: 50%;
+    margin-left: .125em;
+    box-sizing: content-box;
+}
+
+#custom-config-wrapper select {
+    width: 16em;
+    margin-left:auto;
+}
+
+.inline-input {
+    margin-left: .5em;
+}
+
+.inline-input-adv, .settings-select {
+    margin-left: auto;
+    width: 6em;
+}
+
+.inline-input-parent{
+    width: 15em; display:flex;
+}
+
+.stacked-input {
+    margin: .125em 0em .125em 2em;
+    display: block;
+}
+
+input:active, select:active, input:focus, select:focus {
+    border-color: var(--primary);
+}
+
+#settings input, .input-error {
+    border-color: var(--error);
+}
+
+#settings input:valid {
+    border-color: var(--outline-on-surface);  
+}
+
+#settings input:active {
+    border-color: var(--primary);
+}
+
+.radio-item, .radio-item-deselected, .radio-item-selected {
+    display: flex;
+    align-items: center;
+    margin: .5em 0em .5em -.375em;
+    border-width: 0em;
+    border-radius: .25em;
+    padding: .375em 0em;
+    opacity: unset;
+}
+
+.radio-item:hover, .radio-item-deselected:hover{
+    background-color: var(--primary-hover);
+}
+
+.radio-item {
+    background-color: transparent;
+    opacity: unset;
+}
+.radio-item-deselected {
+    opacity:0.4;
+    background-color: transparent;
+}
+.radio-item-selected {
+    opacity:1;
+    background-color: var(--primary-focus);
+}
+
+input[type=radio]{
+  /* Hide original inputs */
+  visibility: hidden;
+  position: absolute;
+}
+
+input[type="radio" i] {
+    margin: 0em;
+}
+input[type=radio] + label:before{
+  height: 1.125em;
+  width: 1.125em;
+  margin-right: .25em;
+  content: " ";
+  display:inline-block;
+  vertical-align: middle;
+  border: .1875em solid black;
+  
+}
+input[type=radio]:checked + label:before{
+  background:var(--primary);
+  box-shadow: inset 0 0 0 .1875em white;
+  border: .1875em solid var(--primary);
+}
+
+/* CUSTOM RADIO AND CHECKBOX STYLES */
+input[type=radio] + label:before{
+  border-radius:50%;
+}
+
+
+/*absolutely not a clue what anything from here to copy-adv-fab does, but it works and makes a nice toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+    width: 3em;
+    height: 1.5em;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0em;
+    height: 0em;
+  }
+  
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0em;
+    left: 0em;
+    right: 0em;
+    bottom: 0em;
+    background-color: #CCCCCC;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 1em;
+    width: 1em;
+    left: .25em;
+    bottom: .25em;
+    background-color: white;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: var(--primary);
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0em 0em .0625em var(--primary);
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(1.875em);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: .75em;
+  }
+  
+.slider.round:before {
+    border-radius: 50%;
+  }
+
+  /*end of stuff i understand minimally and just copied from the internet*/
+button {
+    overflow: hidden;
+    position: relative;
+}
+
+.copy-adv-fab {
+      display: flex;
+      width: fit-content;
+      height: 3.5em;
+      background-color: var(--primary);
+      box-shadow: .1875em .375em .375em #888888;
+      color:white;
+      font-family: 'Work Sans';
+      font-weight:500;
+      font-size: 1em;
+      text-align: center;
+      align-items: center;
+      padding: 1em 2em;
+      outline:none;
+      border-style: solid;
+      border-radius: 2em;
+      border-width: 0em;
+      margin: 2em auto;
+}
+.copy-adv-fab:hover {
+    box-shadow: .1875em .3175em .3175em #888888;
+}
+.copy-adv-fab:active {
+    box-shadow: .1875em .25em .25em #888888;
+}
+
+span.ripple {
+    position: absolute; /* The absolute position we mentioned earlier */
+    border-radius: 50%;
+    transform: scale(0);
+    animation: ripple 600ms linear;
+    background-color: var(--primary-active);
+  }
+
+  @keyframes ripple {
+    to {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
