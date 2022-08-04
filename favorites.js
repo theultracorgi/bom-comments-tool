@@ -3,8 +3,13 @@ var timer = null; //timer for clearing the no cost inclusion field
 function onNoStockCopyClick(excludePricingReason, customer) { //returns note for no stock
     if (hasValidInputs()) {
         var output = getNotePrefix() + "No stock, component LT will not meet build req., "
-        if (excludePricingReason.value.length >= 3) { // checks if the price is included
-            output += excludePricingReason.value + ", no "
+        if (excludePricingReason.value.length > 0) { // checks if the price is included
+            if(excludePricingReason.value.length >= 3) { //checks to sea if there is a reason the price is omitted or not
+                output += excludePricingReason.value + ", no ";
+            } else {
+                output += "no ";
+            }
+            
 
             if (timer != null) { // timer to clear the Price not included field 
                 window.clearTimeout(timer);

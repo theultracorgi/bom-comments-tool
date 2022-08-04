@@ -52,7 +52,7 @@ if(numWidgetSlots >= allOptions.length) { // makes sure there aren't more placeh
 customLoadoutWidgetGenerator();
 
 const urlParams = new URLSearchParams(window.location.search);
-document.getElementById('initials').value = urlParams.get('user') || "";
+document.getElementById('initials').value = urlParams.get('user') || ""; // allows user to be predefined with URL Params
 /*
 function onCustomerChange() { //literally just milwaukee tool cuz they special bois
     if(['milwaukee tool', 'mke tool'].includes(event.target.value.toLowerCase())) {
