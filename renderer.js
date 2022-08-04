@@ -53,14 +53,14 @@ customLoadoutWidgetGenerator();
 
 const urlParams = new URLSearchParams(window.location.search);
 document.getElementById('initials').value = urlParams.get('user') || "";
-
+/*
 function onCustomerChange() { //literally just milwaukee tool cuz they special bois
     if(['milwaukee tool', 'mke tool'].includes(event.target.value.toLowerCase())) {
         document.getElementById('notesLoadout').selectedIndex = 1;
         document.getElementById('notesLoadout').dispatchEvent(new Event('change'))
     }
 }
-
+*/
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
 
 function onLoadoutPresetChange() {
