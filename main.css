@@ -76,7 +76,7 @@ body {
 }
 
 
-#clearFields {
+.navBarIcons {
     margin-left: auto;
     background-color: transparent;
     border-radius: .3125em;
@@ -86,10 +86,10 @@ body {
     
 }
 
-#clearFields:hover {
+#navBarIcons:hover {
     background-color: var(--white-hover);
 }
-#clearFields:active {
+#navBarIcons:active {
     background-color: var(--white-focus);;
 }
 

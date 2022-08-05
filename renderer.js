@@ -43,6 +43,14 @@ var custResponsePreset = [
     ["Confirm P/N Correct", "cpc"]
 ];
 
+var quoteWidgets = [
+'costInclusion'
+
+];
+var salesorderWidgets = [
+    
+];
+
 var numWidgetSlots = 8;
 
 if(numWidgetSlots >= allOptions.length) { // makes sure there aren't more placeholder slots than available widgets
@@ -53,14 +61,22 @@ customLoadoutWidgetGenerator();
 
 const urlParams = new URLSearchParams(window.location.search);
 document.getElementById('initials').value = urlParams.get('user') || ""; // allows user to be predefined with URL Params
-/*
-function onCustomerChange() { //literally just milwaukee tool cuz they special bois
+
+var toolView = false; // TRUE == Sales Order, FALSE == Quote
+
+if(urlParams.get('toolView').toLowerCase()=="so") {
+    switchView();
+}
+//document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
+
+
+function onCustomerChange() { /*//literally just milwaukee tool cuz they special bois
     if(['milwaukee tool', 'mke tool'].includes(event.target.value.toLowerCase())) {
         document.getElementById('notesLoadout').selectedIndex = 1;
         document.getElementById('notesLoadout').dispatchEvent(new Event('change'))
-    }
+    }*/
 }
-*/
+
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
 
 function onLoadoutPresetChange() {
@@ -141,6 +157,27 @@ function onTabClick(navBarLabel, newString) { //updates nav bar heading when swi
 }
 function onEULeadTimeInput() { //updates EU LT heading to match input
     document.getElementById("euLeadTimeLabel").innerHTML = "EU Stock with " + event.target.value + "d LT";
+}
+
+function switchView() {
+    if(toolView) {
+        toolView = false;
+        document.getElementById('viewIcon').textContent = 'format_quote';
+    } else {
+        toolView = true;
+        document.getElementById('viewIcon').textContent = 'currency_exchange';
+    }
+
+    for (var i =0; i<salesorderWidgets.length;i++) {
+        document.getElementById('salesorderWidgets[i]').style.display = substituteByView("block","none");
+    }
+    for (var i =0; i<quoteWidgets.length;i++) {
+        document.getElementById(quoteWidgets[i]).style.display = substituteByView("none","block");
+    }
+
+    document.getElementById('quotedWithAltHeader').innerHTML = substituteByView("Potential Alternate","Quoted With Alternate")
+    var r = document.querySelector(':root');
+    r.style.setProperty('--primary', substituteByView("rgba(239,83,80,1)","rgba(3, 169, 244,1)"));
 }
 
 function clearActiveFields() {
@@ -294,3 +331,11 @@ function createRipple(event) {
   for (const button of buttons) {
     button.addEventListener("click", createRipple);
   }
+
+function substituteByView(textIfTrue, textIfFalse) {
+  if(toolView){
+        return textIfTrue;
+    } else {
+        return textIfFalse;
+    }
+}
