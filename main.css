@@ -14,7 +14,6 @@ ITEM OPACITY
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 
-
 :root {
     --surface: white;
     --emphasis-on-primary-high: white;
@@ -47,29 +46,6 @@ ITEM OPACITY
 
 }
 
-.tooltip {
-    position: relative;
-    display: block;
-  }
-  
-  .tooltip .tooltiptext {
-    visibility: hidden;
-    width: 120px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-  
-    /* Position the tooltip */
-    position: absolute;
-    z-index: 2;
-  }
-  
-  .tooltip:hover .tooltiptext {
-    visibility: visible;
-  }
-
 
 h1 {
     font-family: 'Work Sans';
@@ -100,7 +76,7 @@ body {
 }
 
 
-#clearFields {
+.navBarIcons {
     margin-left: auto;
     background-color: transparent;
     border-radius: .3125em;
@@ -110,10 +86,10 @@ body {
     
 }
 
-#clearFields:hover {
+#navBarIcons:hover {
     background-color: var(--white-hover);
 }
-#clearFields:active {
+#navBarIcons:active {
     background-color: var(--white-focus);;
 }
 

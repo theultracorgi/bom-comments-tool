@@ -26,8 +26,15 @@
 <body>
   <div id="topNavBar">
     <!--TOP NAV BAR-->
+    <div style="display: flex">
+    <button class="navBarIcons" id="switchView" onclick="switchView()">
+      <span id="viewIcon" class="material-icons">
+        format_quote
+      </span>
+    </button>
     <h1 id="navBarLabel" style="justify-content: flex-start;">Favorites</h1>
-    <button id="clearFields" onclick="clearActiveFields()">
+   </div>
+    <button class="navBarIcons" id="clearFields" onclick="clearActiveFields()">
       <span class="material-icons">
         backspace
       </span>
@@ -92,7 +99,7 @@
             <span class="material-icons-outlined">
               alt_route
             </span>
-            <h2>Quoted With Alternate</h2>
+            <h2 id="quotedWithAltHeader">Quoted With Alternate</h2>
             <button class="copy-button" onclick="onQuotedAltClick(altMFRName, altMFRPN)">
               <span class="material-icons-outlined">
                 content_copy
@@ -355,13 +362,8 @@
           <span class="material-icons-outlined" id="brokerPriceAdvIcon" oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;" onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
             price_change
           </span>
-<<<<<<< HEAD
           <div class="adv-label" oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;" onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
             <h2 id="brokerPriceAdvHeader" >Broker Price</h2>
-=======
-          <div class="adv-label">
-            <h2 id="brokerPriceAdvHeader">Broker Price</h2>
->>>>>>> parent of 45b667f (sales order mode toggle and note modifications)
             <h4 id="brokerPriceAdvLabel">through int'l broker @ $45.2342</h4>
             
           </div>
@@ -427,9 +429,6 @@
       </div>
       <!--COST INCLUSION-->
       <div id="costInclusionDiv" class="stock-notice-container">
-=======
-      <div class="stock-notice-container">
->>>>>>> parent of 45b667f (sales order mode toggle and note modifications)
         <div class="radio-item" id="costOption1Parent">
           <input type="radio" id="costOption1" name="costInclude" checked onclick="onRadioButtonClick()" value="">
           <label for="costOption1">Cost included, not mentioned</label>
