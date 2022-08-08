@@ -10,7 +10,7 @@ var allOptions = [ //List of all current widgets and associated tickers. THIS IS
     ["Stock with Lead Time", "swl"],
     ["Confirm P/N Correct", "cpc"],
     ["Spec/BOM Desc Mismatch", "sbm"],
-    ["Packaging Discrepancy", "pkd"],
+  //  ["Packaging Discrepancy", "pkd"],
     ["Quoted As Supplied", "qas"],
     ["Quoted With Inventory", "qwi"],
     ["Sourcing Partial", "srp"],
@@ -20,14 +20,14 @@ var allOptions = [ //List of all current widgets and associated tickers. THIS IS
     
 ];
 
-var mkeToolPreset = [
+var mkePreset = [
     ["<BLANK>", "dum"],                            //dummy doesn't need to be here but tbh it just helps with consistency
     ["No Stock", "nsk"],
     ["Low Stock", "lst"],
     ["Quoted As Supplied", "qas"],
     ["Quoted with Alternate", "qwa"],
     ["Spec/BOM Desc Mismatch", "sbm"],
-    ["Packaging Discrepancy", "pkd"],
+ //   ["Packaging Discrepancy", "pkd"],
     ["Confirm P/N Correct", "cpc"]
 ];
 
@@ -44,7 +44,8 @@ var custResponsePreset = [
 ];
 
 var quoteWidgets = [
-'costInclusion'
+'costInclusionDiv',
+'requiresApprovalDiv'
 
 ];
 var salesorderWidgets = [
@@ -69,14 +70,6 @@ if(urlParams.get('toolView').toLowerCase()=="so") {
 }
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
 
-
-function onCustomerChange() { /*//literally just milwaukee tool cuz they special bois
-    if(['milwaukee tool', 'mke tool'].includes(event.target.value.toLowerCase())) {
-        document.getElementById('notesLoadout').selectedIndex = 1;
-        document.getElementById('notesLoadout').dispatchEvent(new Event('change'))
-    }*/
-}
-
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
 
 function onLoadoutPresetChange() {
@@ -94,12 +87,12 @@ function onLoadoutPresetChange() {
             }
             hideEmptyWidgets();
             break;
-        case 'embedtek':
+        case 'etk':
             hideEmptyWidgets();
             break;
-        case 'mketool':
-            for (var i = 1; i < mkeToolPreset.length; i++) { //no clue why i dont need to add 1 to the length, i think it has something to do with the dummy
-                document.getElementById(`widget${i}`).appendChild(document.getElementById(mkeToolPreset[i][1]));
+        case 'mke':
+            for (var i = 1; i < mkePreset.length; i++) { //no clue why i dont need to add 1 to the length, i think it has something to do with the dummy
+                document.getElementById(`widget${i}`).appendChild(document.getElementById(mkePreset[i][1]));
             }
             hideEmptyWidgets();
             break;
@@ -166,8 +159,13 @@ function switchView() {
     } else {
         toolView = true;
         document.getElementById('viewIcon').textContent = 'currency_exchange';
+        brokersIndex = 0;
+        document.getElementById('requiresApproval').checked = true;
+        onHeaderClick("",document.getElementById("brokerPriceAdvHeader"),"brokers","",0);
     }
 
+    
+    
     for (var i =0; i<salesorderWidgets.length;i++) {
         document.getElementById('salesorderWidgets[i]').style.display = substituteByView("block","none");
     }
@@ -178,6 +176,19 @@ function switchView() {
     document.getElementById('quotedWithAltHeader').innerHTML = substituteByView("Potential Alternate","Quoted With Alternate")
     var r = document.querySelector(':root');
     r.style.setProperty('--primary', substituteByView("rgba(239,83,80,1)","rgba(3, 169, 244,1)"));
+   /* var dummy = [
+        ["lowStockAdvHeader", "lowStockAdvLabel","lowStockAdvIcon"],
+        ["brokerPriceAdvHeader", "brokerPriceAdvLabel","brokerPriceAdvIcon"],
+        ["mPQAdvHeader", "mPQAdvLabel","mPQAdvIcon"],
+        ["mOQAdvHeader", "mOQAdvLabel","mOQAdvIcon"],
+        ["lTAdvHeader", "lTAdvLabel","lTAdvIcon"]
+    ];
+
+    for (var i =0; i < dummy.length; i++){
+        onAdvInputChange(document.getElementById(dummy[i][0]), document.getElementById(dummy[i][1]),document.getElementById(dummy[i][2]));
+
+    }
+    */
 }
 
 function clearActiveFields() {

@@ -358,13 +358,14 @@
       </div>
       <!--BROKER PRICE-->
       <div class="stock-notice-container">
-        <div class="note-header">
-          <span class="material-icons-outlined" id="brokerPriceAdvIcon">
+        <div class="note-header" >
+          <span class="material-icons-outlined" id="brokerPriceAdvIcon" oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;" onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
             price_change
           </span>
-          <div class="adv-label">
-            <h2 id="brokerPriceAdvHeader" onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','')">Broker Price</h2>
+          <div class="adv-label" oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;" onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
+            <h2 id="brokerPriceAdvHeader" >Broker Price</h2>
             <h4 id="brokerPriceAdvLabel">through int'l broker @ $45.2342</h4>
+            
           </div>
           <input id="brokerPriceAdv" class="inline-input-adv" placeholder=" Price"
             oninput="updateLabels(); onAdvInputChange(brokerPriceAdvHeader, brokerPriceAdvLabel, brokerPriceAdvIcon)">
@@ -394,7 +395,7 @@
             <h2 id="mOQAdvHeader">MOQ</h2>
             <h4 id="mOQAdvLabel">with MOQ of 10000</h4>
           </div>
-          <input id="mOQAdv" class="inline-input-adv" placeholder=" Minimum Buy"
+          <input id="mOQAdv" class="inline-input-adv" placeholder=" Min Buy"
             oninput="updateLabels(); onAdvInputChange(mOQAdvHeader, mOQAdvLabel, mOQAdvIcon)">
         </div>
       </div>
@@ -413,7 +414,7 @@
         </div>
       </div>
       <!--REQUIRES CUSTOMER APPROVAL-->
-      <div class="stock-notice-container">
+      <div id="requiresApprovalDiv" class="stock-notice-container">
         <div class="note-header">
           <span class="material-icons-outlined">
             check
@@ -427,7 +428,7 @@
         </div>
       </div>
       <!--COST INCLUSION-->
-      <div id="costInclusion" class="stock-notice-container">
+      <div id="costInclusionDiv" class="stock-notice-container">
         <div class="radio-item" id="costOption1Parent">
           <input type="radio" id="costOption1" name="costInclude" checked onclick="onRadioButtonClick()" value="">
           <label for="costOption1">Cost included, not mentioned</label>
@@ -480,7 +481,7 @@
           business
         </span>
         <h2>Customer</h2>
-        <input id="customer" class="inline-input-adv" required placeholder=" Customer" onchange='onCustomerChange()'>
+        <input id="customer" class="inline-input-adv" required placeholder=" Customer" >
       </div>
       <!--EU STOCK LEAD TIME-->
       <div class="note-header">
@@ -499,8 +500,8 @@
         <h2>Notes Loadout</h2>
         <select name="loadout" id="notesLoadout" class="settings-select" onchange="onLoadoutPresetChange()">
           <option value="default">Default</option>
-          <option value="mketool">MKE Tool</option>
-          <option value="embedtek">EmbedTek</option>
+          <option value="mke">MKE</option>
+          <option value="etk">ETK</option>
           <option value="custresponse">Response</option>
           <option value="custom">Custom</option>
         </select>

@@ -33,24 +33,34 @@ function onAdvInputChange(header, label, icon) { //updates formatting/visible no
     }
 }
 
-var brokersIndex = -1;
+var brokersIndex = 0;
 
 var brokers = [
+    'Int\'l Broker',
     'Win Source',
     'LCSC',
     'Utmel',
     'NACSemi',
     'Worldway',
-    'CXDA',
-    'Int\'l Broker'
+    'CXDA'
+    
 ]
-function onHeaderClick(prefix, header, array, suffix){
+function onHeaderClick(prefix, header, array, suffix, button){
 
-    window[array + 'Index'] +=1;
-    if (window[array + 'Index'] == window[array].length){
-        window[array + 'Index'] = 0
+    if (button == 0) {
+        window[array + 'Index'] +=1;
+        if (window[array + 'Index'] == window[array].length){
+            window[array + 'Index'] = 0
+        }
+    } else {
+        window[array + 'Index'] -=1;
+        if (window[array + 'Index'] == -1){
+            window[array + 'Index'] = window[array].length -1;
+        }
     }
+   
     header.innerHTML = prefix + window[array][window[array + 'Index']] + suffix;
+    updateLabels();
 
 
 }
