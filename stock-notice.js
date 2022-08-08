@@ -48,25 +48,7 @@ var brokers = [
     'TME Electronics'
     
 ]
-function onHeaderClick(prefix, header, array, suffix, button){
 
-    if (button == 0) {
-        window[array + 'Index'] +=1;
-        if (window[array + 'Index'] == window[array].length){
-            window[array + 'Index'] = 0
-        }
-    } else {
-        window[array + 'Index'] -=1;
-        if (window[array + 'Index'] == -1){
-            window[array + 'Index'] = window[array].length -1;
-        }
-    }
-   
-    header.innerHTML = prefix + window[array][window[array + 'Index']] + suffix;
-    updateLabels();
-
-
-}
 
 function updateLabels() { // updates labels to reflect what will be returned in the final note
     for (var i = 0; i < varStockNoticeParams.length; i++) {

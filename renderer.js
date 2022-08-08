@@ -63,9 +63,32 @@ customLoadoutWidgetGenerator();
 const urlParams = new URLSearchParams(window.location.search);
 document.getElementById('initials').value = urlParams.get('user') || ""; // allows user to be predefined with URL Params
 
+
+
 var toolView = false; // TRUE == Sales Order, FALSE == Quote
+if((urlParams.get('toolView') ||"").toLowerCase()=="so") {
+    switchView();
+}
+
+function onHeaderClick(prefix, header, array, suffix, button){
+
+    if (button == 0) {
+        window[array + 'Index'] +=1;
+        if (window[array + 'Index'] == window[array].length){
+            window[array + 'Index'] = 0
+        }
+    } else {
+        window[array + 'Index'] -=1;
+        if (window[array + 'Index'] == -1){
+            window[array + 'Index'] = window[array].length -1;
+        }
+    }
+   
+    header.innerHTML = prefix + window[array][window[array + 'Index']] + suffix;
+    updateLabels();
 
 
+}
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
 
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
