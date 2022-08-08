@@ -42,7 +42,10 @@ var brokers = [
     'Utmel',
     'NACSemi',
     'Worldway',
-    'CXDA'
+    'CXDA',
+    'Heisener',
+    'Quest Components',
+    'TME Electronics'
     
 ]
 function onHeaderClick(prefix, header, array, suffix, button){
