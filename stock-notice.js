@@ -1,10 +1,37 @@
-var varStockNoticeParams = [ //lazy and don't want to do charAt to change case its just not worth. Honestly might be more efficient even
+var brokersIndex;
+var brokers;
+var r;
+var varStockNoticeParams;
+
+window.addEventListener('load', function() {
+    r = document.querySelector(':root');
+
+    varStockNoticeParams = [ //lazy and don't want to do charAt to change case its just not worth. Honestly might be more efficient even
     ["lowStock", "LowStock"],
     ["brokerPrice", "BrokerPrice"],
     ["mPQ", "MPQ"],
     ["mOQ", "MOQ"],
     ["lT", "LT"]
 ]
+
+brokersIndex = 0;
+brokers = [
+    'Int\'l Broker',
+    'Win Source',
+    'LCSC',
+    'Utmel',
+    'NACSemi',
+    'Worldway',
+    'CXDA',
+    'Heisener',
+    'Quest Components',
+    'TME Electronics'
+];
+
+});
+
+
+
 
 //EVENT LISTENER METHODS
 //
@@ -20,7 +47,7 @@ function onRadioButtonClick() { //sets radio button styles for the cost inclusio
         event.target.parentNode.className = 'radio-item-selected';
     }
 }
-var r = document.querySelector(':root');
+
 function onAdvInputChange(header, label, icon) { //updates formatting/visible note portions for stock notice inputs
     if (event.target.value !== '') {
         icon.style.color = getComputedStyle(r).getPropertyValue("--primary");
@@ -33,21 +60,7 @@ function onAdvInputChange(header, label, icon) { //updates formatting/visible no
     }
 }
 
-var brokersIndex = 0;
 
-var brokers = [
-    'Int\'l Broker',
-    'Win Source',
-    'LCSC',
-    'Utmel',
-    'NACSemi',
-    'Worldway',
-    'CXDA',
-    'Heisener',
-    'Quest Components',
-    'TME Electronics'
-    
-]
 
 
 function updateLabels() { // updates labels to reflect what will be returned in the final note

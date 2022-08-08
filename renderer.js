@@ -1,6 +1,14 @@
-//GLOBAL FUNCTIONS
+var allOptions;
+var mkePreset;
+var custResponsePreset;
+var numWidgetSlots;
+var quoteWidgets;
+var salesorderWidgets;
+var toolView;
 
-var allOptions = [ //List of all current widgets and associated tickers. THIS IS THE DB IT SHOULD PROBABLY BE A JSON BUT I DONT FEEL LIKE DOING THAT RIGHT NOW
+
+window.addEventListener('load', function() {
+    allOptions = [ //List of all current widgets and associated tickers. THIS IS THE DB IT SHOULD PROBABLY BE A JSON BUT I DONT FEEL LIKE DOING THAT RIGHT NOW
     ["<BLANK>", "dum"], 
     ["No Stock", "nsk"],
     ["EU Stock", "eus"],
@@ -20,7 +28,7 @@ var allOptions = [ //List of all current widgets and associated tickers. THIS IS
     
 ];
 
-var mkePreset = [
+mkePreset = [
     ["<BLANK>", "dum"],                            //dummy doesn't need to be here but tbh it just helps with consistency
     ["No Stock", "nsk"],
     ["Low Stock", "lst"],
@@ -31,7 +39,7 @@ var mkePreset = [
     ["Confirm P/N Correct", "cpc"]
 ];
 
-var custResponsePreset = [
+custResponsePreset = [
     ["<BLANK>", "dum"],
     ["Quoted with Alternate", "qwa"],
     ["Alternate Approved", "caa"],
@@ -43,32 +51,34 @@ var custResponsePreset = [
     ["Confirm P/N Correct", "cpc"]
 ];
 
-var quoteWidgets = [
+numWidgetSlots = 8;
+customLoadoutWidgetGenerator();
+
+quoteWidgets = [
 'costInclusionDiv',
 'requiresApprovalDiv'
 
 ];
-var salesorderWidgets = [
+salesorderWidgets = [
     
 ];
-
-var numWidgetSlots = 8;
 
 if(numWidgetSlots >= allOptions.length) { // makes sure there aren't more placeholder slots than available widgets
     numWidgetSlots = allOptions.length -1;
 }
 
-customLoadoutWidgetGenerator();
-
 const urlParams = new URLSearchParams(window.location.search);
 document.getElementById('initials').value = urlParams.get('user') || ""; // allows user to be predefined with URL Params
 
-
-
-var toolView = false; // TRUE == Sales Order, FALSE == Quote
+toolView = false; // TRUE == Sales Order, FALSE == Quote
 if((urlParams.get('toolView') ||"").toLowerCase()=="so") {
     switchView();
 }
+});
+
+//GLOBAL FUNCTIONS
+
+
 
 function onHeaderClick(prefix, header, array, suffix, button){
 
@@ -86,8 +96,6 @@ function onHeaderClick(prefix, header, array, suffix, button){
    
     header.innerHTML = prefix + window[array][window[array + 'Index']] + suffix;
     updateLabels();
-
-
 }
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
 
@@ -357,7 +365,7 @@ function createRipple(event) {
     button.appendChild(circle);
   }
   
-  const buttons = document.getElementsByTagName("button");
+const buttons = document.getElementsByTagName("button");
   for (const button of buttons) {
     button.addEventListener("click", createRipple);
   }
