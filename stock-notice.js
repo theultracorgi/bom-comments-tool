@@ -20,11 +20,11 @@ function onRadioButtonClick() { //sets radio button styles for the cost inclusio
         event.target.parentNode.className = 'radio-item-selected';
     }
 }
-var r = document.querySelector(':root');
+
 function onAdvInputChange(header, label, icon) { //updates formatting/visible note portions for stock notice inputs
     if (event.target.value !== '') {
-        icon.style.color = getComputedStyle(r).getPropertyValue("--primary");
-        header.style.color = getComputedStyle(r).getPropertyValue("--primary");
+        icon.style.color = 'rgba(3, 169, 244,1)';
+        header.style.color = 'rgba(3, 169, 244,1)';
         label.style.display = "block";
     } else {
         icon.style.color = 'black';
@@ -33,6 +33,7 @@ function onAdvInputChange(header, label, icon) { //updates formatting/visible no
     }
 }
 
+<<<<<<< HEAD
 var brokersIndex = 0;
 
 var brokers = [
@@ -68,6 +69,8 @@ function onHeaderClick(prefix, header, array, suffix, button){
 
 }
 
+=======
+>>>>>>> parent of 45b667f (sales order mode toggle and note modifications)
 function updateLabels() { // updates labels to reflect what will be returned in the final note
     for (var i = 0; i < varStockNoticeParams.length; i++) {
         document.getElementById(varStockNoticeParams[i][0] + 'AdvLabel').innerHTML = window['get' + varStockNoticeParams[i][1] + 'String']();
@@ -115,9 +118,9 @@ function getBrokerPriceString() { //returns gramatically correct substring for B
         return '';
     } else {
         if (getLowStockString() !== '') {
-            return ` through ${(brokers[brokersIndex] || "int'l broker")} @ $` + document.getElementById('brokerPriceAdv').value + "/pc";
+            return " through int'l broker @ $" + document.getElementById('brokerPriceAdv').value + "/pc";
         } else {
-            return `Stock available through  ${(brokers[brokersIndex] || "int'l broker")} @ $` + document.getElementById('brokerPriceAdv').value + "/pc";
+            return "Stock available through int'l broker @ $" + document.getElementById('brokerPriceAdv').value + "/pc";
         }
     }
 }
@@ -180,9 +183,9 @@ function getCheckedCostInclusion(groupName) { //returns gramatically correct sub
     if (radioGroup[0].checked) {
         return "";
     } else if (radioGroup[1].checked) {
-        return substituteByView(" ", " Cost included in quote")
+        return " Cost included in quote"
     } else {
-        return `${substituteByView("", " No cost included in quote")} Can ` + document.getElementById('customer').value + " supply or suggest alternates?"
+        return " No cost included in quote. Can " + document.getElementById('customer').value + " supply or suggest alternates?"
     }
 }
 
