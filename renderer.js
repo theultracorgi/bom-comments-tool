@@ -65,9 +65,7 @@ document.getElementById('initials').value = urlParams.get('user') || ""; // allo
 
 var toolView = false; // TRUE == Sales Order, FALSE == Quote
 
-if((urlParams.get('toolView') ||"").toLowerCase()=="so") {
-    switchView();
-}
+
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
 
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
@@ -164,8 +162,6 @@ function switchView() {
         onHeaderClick("",document.getElementById("brokerPriceAdvHeader"),"brokers","",0);
     }
 
-    
-    
     for (var i =0; i<salesorderWidgets.length;i++) {
         document.getElementById('salesorderWidgets[i]').style.display = substituteByView("block","none");
     }
