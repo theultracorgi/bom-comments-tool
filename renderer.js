@@ -43,7 +43,6 @@ var custResponsePreset = [
     ["Confirm P/N Correct", "cpc"]
 ];
 
-<<<<<<< HEAD
 var quoteWidgets = [
 'costInclusionDiv',
 'requiresApprovalDiv'
@@ -53,8 +52,6 @@ var salesorderWidgets = [
     
 ];
 
-=======
->>>>>>> parent of 45b667f (sales order mode toggle and note modifications)
 var numWidgetSlots = 8;
 
 if(numWidgetSlots >= allOptions.length) { // makes sure there aren't more placeholder slots than available widgets
@@ -65,7 +62,6 @@ customLoadoutWidgetGenerator();
 
 const urlParams = new URLSearchParams(window.location.search);
 document.getElementById('initials').value = urlParams.get('user') || ""; // allows user to be predefined with URL Params
-<<<<<<< HEAD
 
 var toolView = false; // TRUE == Sales Order, FALSE == Quote
 
@@ -74,16 +70,6 @@ if(urlParams.get('toolView').toLowerCase()=="so") {
 }
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
 
-=======
-/*
-function onCustomerChange() { //literally just milwaukee tool cuz they special bois
-    if(['milwaukee tool', 'mke tool'].includes(event.target.value.toLowerCase())) {
-        document.getElementById('notesLoadout').selectedIndex = 1;
-        document.getElementById('notesLoadout').dispatchEvent(new Event('change'))
-    }
-}
-*/
->>>>>>> parent of 45b667f (sales order mode toggle and note modifications)
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
 
 function onLoadoutPresetChange() {
@@ -166,7 +152,6 @@ function onEULeadTimeInput() { //updates EU LT heading to match input
     document.getElementById("euLeadTimeLabel").innerHTML = "EU Stock with " + event.target.value + "d LT";
 }
 
-<<<<<<< HEAD
 function switchView() {
     if(toolView) {
         toolView = false;
@@ -206,8 +191,6 @@ function switchView() {
     */
 }
 
-=======
->>>>>>> parent of 45b667f (sales order mode toggle and note modifications)
 function clearActiveFields() {
     document.querySelectorAll(['input','textarea']).forEach((input) => { //clears text inputs except initials, customer name, and EU LT
         if (input.id === 'initials' || input.id === 'customer' || input.id === 'euLeadTime') {
@@ -359,3 +342,11 @@ function createRipple(event) {
   for (const button of buttons) {
     button.addEventListener("click", createRipple);
   }
+
+function substituteByView(textIfTrue, textIfFalse) {
+  if(toolView){
+        return textIfTrue;
+    } else {
+        return textIfFalse;
+    }
+}
