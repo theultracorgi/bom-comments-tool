@@ -65,7 +65,7 @@ document.getElementById('initials').value = urlParams.get('user') || ""; // allo
 
 var toolView = false; // TRUE == Sales Order, FALSE == Quote
 
-if(urlParams.get('toolView').toLowerCase()=="so") {
+if((urlParams.get('toolView') ||"").toLowerCase()=="so") {
     switchView();
 }
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
