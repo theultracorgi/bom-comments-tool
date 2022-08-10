@@ -123,7 +123,7 @@ function getBrokerPriceString() { //returns gramatically correct substring for B
         if (getLowStockString() !== '') {
             return ` through ${(brokers[brokersIndex] || "int'l broker")} @ $` + document.getElementById('brokerPriceAdv').value + "/pc";
         } else {
-            return `Stock available through  ${(brokers[brokersIndex] || "int'l broker")} @ $` + document.getElementById('brokerPriceAdv').value + "/pc";
+            return `Stock available through ${(brokers[brokersIndex] || "int'l broker")} @ $` + document.getElementById('brokerPriceAdv').value + "/pc";
         }
     }
 }
