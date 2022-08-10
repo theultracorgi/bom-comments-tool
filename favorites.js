@@ -122,9 +122,9 @@ function onAlternateApprovedClick(note) {
     }
 }
 
-function onAlternateFromCustomerClick(alternate, customer) {
+function onApprovalFromCustomerClick(alternate, customer) {
     if (hasValidInputs([alternate])) {
-        navigator.clipboard.writeText(getNotePrefix() + alternate.value + " approved" + appendOtherNotes("Fav"));
+        navigator.clipboard.writeText(getNotePrefix() + alternate.value + ` approved per ${customer}`+ appendOtherNotes("Fav"));
     }
 }
 

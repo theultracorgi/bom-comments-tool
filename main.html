@@ -293,21 +293,21 @@
           </div>
           <input id="alternateApprovedInput" placeholder="Note" class="stacked-input">
         </div>
-         <!--CUSTOMER SUGGESTED ALT-->
+         <!--CUSTOMER Approval-->
          <div id="afc" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined">
               assistant
             </span>
-            <h2>Alternate From Customer</h2>
-            <button class="copy-button" onclick="onAlternateFromCustomerClick(alternateFromCustomerInput, customer.value)">
+            <h2 id="approvalFromCustomerHeader">Approval From Customer</h2>
+            <button class="copy-button" onclick="onApprovalFromCustomerClick(approvalFromCustomerInput, customer.value)">
               <span class="material-icons-outlined">
                 content_copy
               </span>
               COPY
             </button>
           </div>
-          <input id="alternateFromCustomerInput" placeholder="Alternate P/N" class="stacked-input">
+          <input id="approvalFromCustomerInput" placeholder="Approved Item" class="stacked-input">
         </div>
         <!--CUSTOMER TO SUPPLY-->
         <div id="cts" style="display: inherit;">

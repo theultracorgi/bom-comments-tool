@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
    // ["Quoted With Inventory", "qwi"],
     ["Sourcing Partial", "srp"],
     ["Alternate Approved", "caa"],
-    ["Alt From Customer", "afc"],
+    ["Customer Approval", "afc"],
     ["Sourcing From Inventory", "sfi"],
     ["Customer Supplied", "cts"]
     
@@ -61,7 +61,7 @@ salesOrderPreset = [
     ["Stock with Lead Time", "swl"],
     ["Spec/BOM Desc Mismatch", "sbm"],
     ["Sourcing Partial", "srp"],
-    ["Alt From Customer", "afc"],
+    ["Customer Approval", "afc"],
     ["Customer Supplied", "cts"]
     
 ];
@@ -209,7 +209,8 @@ function switchView() {
         document.getElementById(quoteWidgets[i]).style.display = substituteByView("none","block");
     }
 
-    document.getElementById('quotedWithAltHeader').innerHTML = substituteByView("Potential Alternate","Quoted With Alternate")
+    document.getElementById('quotedWithAltHeader').innerHTML = substituteByView("Potential Alternate","Quoted With Alternate");
+
     var r = document.querySelector(':root');
     r.style.setProperty('--primary', substituteByView("rgba(239,83,80,1)","rgba(3, 169, 244,1)"));
     document.getElementById("notesLoadout").onchange();
