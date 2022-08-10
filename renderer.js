@@ -187,7 +187,7 @@ function onEULeadTimeInput() { //updates EU LT heading to match input
 function onBookmarkPageClick() {
     navigator.clipboard.writeText(`https://theultracorgi.github.io/bom-comments-tool/index.html?user=${document.getElementById('initials').value}` +
     `&toolView=${substituteByView("so","")}&loadout=${document.getElementById('notesLoadout').value}`);
-    alert('1. Right click the Bookmarks bar,\n2. Click "Add Page",\n3. Paste clipboard into URL. Name whatever is most convenient')
+    alert('1. Right click the Bookmarks bar,\n2. Click "Add Page",\n3. "Name" whatever is most convenient\n4. Paste clipboard into URL')
 }
 
 function switchView() {
@@ -262,22 +262,20 @@ async function onOctopartLookupClick(buttonFunction) {
         uniq = [...new Set(clipText.split(/\r?\n/))];
         partNumberIndex = -1;
 
+
         if (timer != null) { // timer to clear the Price not included field 
             window.clearTimeout(timer);
             timer = null;
         }
-
-    
         octopartIcon.innerHTML = "checklist";
-        timer = setTimeout(function () { octopartIcon.innerHTML = "filter_8"; }, 1250);
+        timer = setTimeout(function () { octopartIcon.innerHTML = "filter_8"; }, 1250); 
         
-    } else {
+    }
         partNumberIndex +=1;
         if (partNumberIndex== uniq.length){
             partNumberIndex = 0;
         }
         window.open(`https://octopart.com/search?q=${uniq[partNumberIndex]}`);
-    }
 }
 
 function getNotePrefix() { // returns note prefix in format: 'YYYY-MM-DD FL:'

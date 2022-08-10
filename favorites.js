@@ -66,7 +66,7 @@ function onSpecMismatchClick(specDesc, listedSpec, bomDesc) { // returns note fo
 
 function onSourcingPartialClick(sourceableQTY, higherQTYLT) { // returns note for sourcing partial stock
     if (hasValidInputs([sourceableQTY, higherQTYLT]) || (hasValidInputs([sourceableQTY]) && toolView )) {
-        navigator.clipboard.writeText(getNotePrefix() + `Can source up to ` + sourceableQTY.value + ` QTY PCBAs, ${substituteByView("can customer supply or suggest alternate?","higher QTYs subject to " + higherQTYLT.value + "w LT and potential volume MOQs")}` + appendOtherNotes('Fav'));
+        navigator.clipboard.writeText(getNotePrefix() + `Can source up to ` + sourceableQTY.value + ` QTY PCBAs, ${substituteByView("can customer supply or suggest alternate for remainder?","higher QTYs subject to " + higherQTYLT.value + "w LT and potential volume MOQs")}` + appendOtherNotes('Fav'));
     }
 }
 
