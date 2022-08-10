@@ -73,7 +73,7 @@ function onSourcingPartialClick(sourceableQTY, higherQTYLT) { // returns note fo
 function onStockWithLeadTimeClick(leadTime) {
     if (hasValidInputs([leadTime])) {
         if (leadTime.value.includes('d') || leadTime.value.includes('w')) {
-            navigator.clipboard.writeText(getNotePrefix() + `Stock available with " + leadTime.value + " LT, is this acceptable?${substituteByView(" ", " Cost included in quote")}` + appendOtherNotes('Fav'));
+            navigator.clipboard.writeText(getNotePrefix() + `Stock available with ` + leadTime.value + ` LT, is this acceptable?${substituteByView(" ", " Cost included in quote")}` + appendOtherNotes('Fav'));
         } else if (leadTime.value.includes('/') || leadTime.value.includes('-')) {
             navigator.clipboard.writeText(getNotePrefix() + "Stock with expected ship date of " + leadTime.value + `, is this acceptable?${substituteByView(" ", " Cost included in quote")}` + appendOtherNotes('Fav'));
         } else {
