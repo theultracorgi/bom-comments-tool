@@ -1,6 +1,7 @@
 var allOptions;
 var mkePreset;
 var custResponsePreset;
+var salesOrderPreset;
 var numWidgetSlots;
 var quoteWidgets;
 var salesorderWidgets;
