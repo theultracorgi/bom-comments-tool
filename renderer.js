@@ -6,8 +6,8 @@ var quoteWidgets;
 var salesorderWidgets;
 var toolView;
 
+document.addEventListener("DOMContentLoaded", function(event) {
 
-window.addEventListener('load', function() {
     allOptions = [ //List of all current widgets and associated tickers. THIS IS THE DB IT SHOULD PROBABLY BE A JSON BUT I DONT FEEL LIKE DOING THAT RIGHT NOW
     ["<BLANK>", "dum"], 
     ["No Stock", "nsk"],
@@ -20,10 +20,11 @@ window.addEventListener('load', function() {
     ["Spec/BOM Desc Mismatch", "sbm"],
   //  ["Packaging Discrepancy", "pkd"],
     ["Quoted As Supplied", "qas"],
-    ["Quoted With Inventory", "qwi"],
+   // ["Quoted With Inventory", "qwi"],
     ["Sourcing Partial", "srp"],
     ["Alternate Approved", "caa"],
     ["Alt From Customer", "afc"],
+    ["Sourcing From Inventory", "sfi"],
     ["Customer Supplied", "cts"]
     
 ];
@@ -51,12 +52,26 @@ custResponsePreset = [
     ["Confirm P/N Correct", "cpc"]
 ];
 
+salesOrderPreset = [
+    ["<BLANK>", "dum"], 
+    ["No Stock", "nsk"],
+    ["P/N Not Found", "pnf"],
+    ["Quoted with Alternate", "qwa"],
+    ["Stock with Lead Time", "swl"],
+    ["Spec/BOM Desc Mismatch", "sbm"],
+    ["Sourcing Partial", "srp"],
+    ["Alt From Customer", "afc"],
+    ["Customer Supplied", "cts"]
+    
+];
+
 numWidgetSlots = 8;
-customLoadoutWidgetGenerator();
+
 
 quoteWidgets = [
 'costInclusionDiv',
-'requiresApprovalDiv'
+'requiresApprovalDiv',
+'higherQTYLT'
 
 ];
 salesorderWidgets = [
@@ -69,34 +84,17 @@ if(numWidgetSlots >= allOptions.length) { // makes sure there aren't more placeh
 
 const urlParams = new URLSearchParams(window.location.search);
 document.getElementById('initials').value = urlParams.get('user') || ""; // allows user to be predefined with URL Params
-
+customLoadoutWidgetGenerator();
 toolView = false; // TRUE == Sales Order, FALSE == Quote
 if((urlParams.get('toolView') ||"").toLowerCase()=="so") {
     switchView();
 }
-});
 
+    document.getElementById("notesLoadout").value = urlParams.get('loadout') ||"default";
+    document.getElementById("notesLoadout").onchange();
+});
 //GLOBAL FUNCTIONS
 
-
-
-function onHeaderClick(prefix, header, array, suffix, button){
-
-    if (button == 0) {
-        window[array + 'Index'] +=1;
-        if (window[array + 'Index'] == window[array].length){
-            window[array + 'Index'] = 0
-        }
-    } else {
-        window[array + 'Index'] -=1;
-        if (window[array + 'Index'] == -1){
-            window[array + 'Index'] = window[array].length -1;
-        }
-    }
-   
-    header.innerHTML = prefix + window[array][window[array + 'Index']] + suffix;
-    updateLabels();
-}
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
 
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
@@ -109,7 +107,7 @@ function onLoadoutPresetChange() {
     }
     document.getElementById('custom-config').style.display = "none";
 
-    switch (event.target.value) {
+    switch (document.getElementById("notesLoadout").value) {
         case 'default':
             for (var i = 1; i < numWidgetSlots +1; i++) { //again im not stupid its just the widgets index from 1 so thats why everything starts at 1
                 document.getElementById(`widget${i}`).appendChild(document.getElementById(allOptions[i][1]));
@@ -131,6 +129,12 @@ function onLoadoutPresetChange() {
             }
             hideEmptyWidgets();
             break;
+        case 'salesorder':
+            for (var i = 1; i < salesOrderPreset.length; i++) { //no clue why i dont need to add 1 to the length, i think it has something to do with the dummy
+                document.getElementById(`widget${i}`).appendChild(document.getElementById(salesOrderPreset[i][1]));
+            }
+            hideEmptyWidgets();
+            break;
         case 'custom':
             document.getElementById('custom-config').style.display = "block";
             for (var i = 1; i < numWidgetSlots +1; i++) {
@@ -143,7 +147,6 @@ function onLoadoutPresetChange() {
             break;
     }
 }
-
 
 function onCustomLoadoutSelectionChange() {
     for (var i = 1; i < numWidgetSlots +1; i++) { 
@@ -181,20 +184,25 @@ function onEULeadTimeInput() { //updates EU LT heading to match input
     document.getElementById("euLeadTimeLabel").innerHTML = "EU Stock with " + event.target.value + "d LT";
 }
 
+function onBookmarkPageClick() {
+    navigator.clipboard.writeText(`https://theultracorgi.github.io/bom-comments-tool/index.html?user=${document.getElementById('initials').value}` +
+    `&toolView=${substituteByView("so","")}&loadout=${document.getElementById('notesLoadout').value}`);
+    alert('1. Right click the Bookmarks bar,\n2. Click "Add Page",\n3. Paste clipboard into URL. Name whatever is most convenient')
+}
+
 function switchView() {
+    toolView = !toolView;
     if(toolView) {
-        toolView = false;
-        document.getElementById('viewIcon').textContent = 'format_quote';
-    } else {
-        toolView = true;
-        document.getElementById('viewIcon').textContent = 'currency_exchange';
         brokersIndex = 0;
         document.getElementById('requiresApproval').checked = true;
-        onHeaderClick("",document.getElementById("brokerPriceAdvHeader"),"brokers","",0);
+        onHeaderClick("",document.getElementById("brokerPriceAdvHeader"),"brokers","",0);     
     }
+    document.getElementById('viewIcon').textContent = substituteByView('currency_exchange','format_quote');
+    document.getElementById("notesLoadout").value = substituteByView("salesorder","default");
+    
 
     for (var i =0; i<salesorderWidgets.length;i++) {
-        document.getElementById('salesorderWidgets[i]').style.display = substituteByView("block","none");
+        document.getElementById(salesorderWidgets[i]).style.display = substituteByView("block","none");
     }
     for (var i =0; i<quoteWidgets.length;i++) {
         document.getElementById(quoteWidgets[i]).style.display = substituteByView("none","block");
@@ -203,6 +211,7 @@ function switchView() {
     document.getElementById('quotedWithAltHeader').innerHTML = substituteByView("Potential Alternate","Quoted With Alternate")
     var r = document.querySelector(':root');
     r.style.setProperty('--primary', substituteByView("rgba(239,83,80,1)","rgba(3, 169, 244,1)"));
+    document.getElementById("notesLoadout").onchange();
    /* var dummy = [
         ["lowStockAdvHeader", "lowStockAdvLabel","lowStockAdvIcon"],
         ["brokerPriceAdvHeader", "brokerPriceAdvLabel","brokerPriceAdvIcon"],
@@ -242,6 +251,33 @@ function clearActiveFields() {
     document.getElementById('costOption2Parent').className = 'radio-item';
     document.getElementById('costOption3Parent').className = 'radio-item';
     document.getElementById('requiresApproval').checked = false;
+}
+var partNumberIndex;
+var uniq;
+var octopartIcon = document.getElementById("octopartLookupIcon");
+async function onOctopartLookupClick(buttonFunction) {
+    
+    if (buttonFunction) {
+        var clipText = await navigator.clipboard.readText();
+        uniq = [...new Set(clipText.split(/\r?\n/))];
+        partNumberIndex = -1;
+
+        if (timer != null) { // timer to clear the Price not included field 
+            window.clearTimeout(timer);
+            timer = null;
+        }
+
+    
+        octopartIcon.innerHTML = "checklist";
+        timer = setTimeout(function () { octopartIcon.innerHTML = "filter_8"; }, 1250);
+        
+    } else {
+        partNumberIndex +=1;
+        if (partNumberIndex== uniq.length){
+            partNumberIndex = 0;
+        }
+        window.open(`https://octopart.com/search?q=${uniq[partNumberIndex]}`);
+    }
 }
 
 function getNotePrefix() { // returns note prefix in format: 'YYYY-MM-DD FL:'

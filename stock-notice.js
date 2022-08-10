@@ -3,8 +3,7 @@ var brokers;
 var r;
 var varStockNoticeParams;
 
-window.addEventListener('load', function() {
-    r = document.querySelector(':root');
+r = document.querySelector(':root');
 
     varStockNoticeParams = [ //lazy and don't want to do charAt to change case its just not worth. Honestly might be more efficient even
     ["lowStock", "LowStock"],
@@ -27,10 +26,6 @@ brokers = [
     'Quest Components',
     'TME Electronics'
 ];
-
-});
-
-
 
 
 //EVENT LISTENER METHODS
@@ -60,7 +55,23 @@ function onAdvInputChange(header, label, icon) { //updates formatting/visible no
     }
 }
 
+function onHeaderClick(prefix, header, array, suffix, button){
 
+    if (button == 0) {
+        window[array + 'Index'] +=1;
+        if (window[array + 'Index'] == window[array].length){
+            window[array + 'Index'] = 0;
+        }
+    } else {
+        window[array + 'Index'] -=1;
+        if (window[array + 'Index'] == -1){
+            window[array + 'Index'] = window[array].length -1;
+        }
+    }
+   
+    header.innerHTML = prefix + window[array][window[array + 'Index']] + suffix;
+    updateLabels();
+}
 
 
 function updateLabels() { // updates labels to reflect what will be returned in the final note

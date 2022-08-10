@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>BOM Comments Tool</title>
+  <title>Notify</title>
   <link rel="shortcut icon" type="image/png" href="resources/images/favicon.png"/>
 
   <link rel="stylesheet" href="main.css">
@@ -26,15 +26,20 @@
 <body>
   <div id="topNavBar">
     <!--TOP NAV BAR-->
-    <div style="display: flex">
-    <button class="navBarIcons" id="switchView" onclick="switchView()">
+    <div style="display: flex;">
+    <button style="padding-left: .125em;" class="navBarIcons" id="switchView" onclick="switchView()">
       <span id="viewIcon" class="material-icons">
         format_quote
       </span>
     </button>
     <h1 id="navBarLabel" style="justify-content: flex-start;">Favorites</h1>
-   </div>
-    <button class="navBarIcons" id="clearFields" onclick="clearActiveFields()">
+   </div> 
+   <button class="navBarIcons" id="octopartLookup" oncontextmenu="onOctopartLookupClick(true); return false" onclick="onOctopartLookupClick(false)">
+    <span id="octopartLookupIcon" class="material-icons">
+      filter_8
+    </span>
+  </button>
+    <button style="padding-right: .125em;"class="navBarIcons" id="clearFields" onclick="clearActiveFields()">
       <span class="material-icons">
         backspace
       </span>
@@ -186,7 +191,6 @@
             </button>
 
           </div>
-
         </div>
         <!--PACKAGING DISCREPANCY-->
         <div id="pkd" style="display: inherit;">
@@ -318,6 +322,28 @@
               </span>
               COPY
             </button>
+          </div>
+        </div>
+
+        <!--Sourcing from inventory/TPS-->
+        <div id="sfi" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined">
+              inventory
+            </span>
+            <h2>Sourcing from Inventory</h2>
+            <button class="copy-button" onclick="onSourcingInventoryClick(inventoryLocation, inventoryQTY)">
+              <span class="material-icons-outlined">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <div class="inline-input-parent">
+            <input id="inventoryLocation" placeholder="Location" class="stacked-input"
+              style="width:50%; margin-right: .125em;">
+            <input id="inventoryQTY" placeholder="QTY" class="stacked-input" style="width:50%; margin-left:.125em;">
           </div>
         </div>
 
@@ -500,6 +526,7 @@
         <h2>Notes Loadout</h2>
         <select name="loadout" id="notesLoadout" class="settings-select" onchange="onLoadoutPresetChange()">
           <option value="default">Default</option>
+          <option value="salesorder">Sales Order</option>
           <option value="mke">MKE</option>
           <option value="etk">ETK</option>
           <option value="custresponse">Response</option>
@@ -509,8 +536,18 @@
       <div id="custom-config" style="width: 100%; display: none;">
         <div class="page-header" style="margin-top: 1em; margin-bottom: .25em;">CUSTOM LOADOUT</div>
         <div id="custom-config-wrapper"></div>
+        
       </div>
+      <!--COPY BUTTON-->
+      <button id="bookmarkPage" class="copy-adv-fab" onclick="onBookmarkPageClick()">
+        
+        <span class="material-icons-outlined" style="padding-right: .5em;">
+          bookmark
+        </span>
+        BOOKMARK CONFIG
+      </button>
     </div>
+    
 
 
 
@@ -544,9 +581,9 @@
         </a></li>
     </ul>
   </div>
-  <script src="renderer.js"></script>
-  <script src="stock-notice.js"></script>
-  <script src="favorites.js"></script>
+  <script async defer src="renderer.js"></script>
+  <script async defer src="stock-notice.js"></script>
+  <script async defer src="favorites.js"></script>
 
 
 
