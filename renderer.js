@@ -257,10 +257,17 @@ function clearActiveFields() {
 var partNumberIndex;
 var uniq;
 var octopartIcon = document.getElementById("octopartLookupIcon");
+
+
 async function onOctopartLookupClick(buttonFunction) {
     
     if (buttonFunction) {
         var clipText = await navigator.clipboard.readText();
+        
+        if(clipText.startsWith('"')) {
+           clipText = clipText.substring(1,clipText.length-3); // for whatever reason when you copy a cell, an extra alt enter gets added
+        }
+        
         uniq = [...new Set(clipText.split(/\r?\n/))];
         partNumberIndex = -1;
 
