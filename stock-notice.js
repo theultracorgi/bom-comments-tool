@@ -31,7 +31,7 @@ brokers = [
 //EVENT LISTENER METHODS
 //
 function onRadioButtonClick() { //sets radio button styles for the cost inclusion group
-    for (var i = 1; i < 4; i++) {
+    for (var i = 1; i < 5; i++) {
         if (document.getElementById('costOption' + i) != event.target) {
             document.getElementById('costOption' + i).parentNode.className = 'radio-item-deselected';
         }
@@ -187,6 +187,8 @@ function getCheckedCostInclusion(groupName) { //returns gramatically correct sub
         return "";
     } else if (radioGroup[1].checked) {
         return substituteByView(" ", " Cost included in quote")
+    } else if (radioGroup[2].checked) {
+        return substituteByView(" ", " Distribution cost included in quote")
     } else {
         return `${substituteByView("", " No cost included in quote")} Can ` + document.getElementById('customer').value + " supply or suggest alternates?"
     }
