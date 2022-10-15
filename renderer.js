@@ -185,11 +185,14 @@ function onEULeadTimeInput() { //updates EU LT heading to match input
     document.getElementById("euLeadTimeLabel").innerHTML = "EU Stock with " + event.target.value + "d LT";
 }
 
-function onBookmarkPageClick() {
-    navigator.clipboard.writeText(`https://theultracorgi.github.io/bom-comments-tool/index.html?user=${document.getElementById('initials').value}` +
+function onCopyExportLegendClick() {
+  navigator.clipboard.writeText(document.getElementById("exportLegend").outerHTML)//`${document.getElementById('customer').value} Attention Required	BoM Tool v1\nTouchPad Electronics Attention Required	${getNotePrefix().substring(0,10)}\nResolved	\nDo Not Populate	`);
+  
+  
+    /* navigator.clipboard.writeText(`https://theultracorgi.github.io/bom-comments-tool/index.html?user=${document.getElementById('initials').value}` +
     `&toolView=${substituteByView("so","")}&loadout=${document.getElementById('notesLoadout').value}`);
     alert('1. Right click the Bookmarks bar,\n2. Click "Add Page",\n3. "Name" whatever is most convenient\n4. Paste clipboard into URL')
-}
+*/}
 
 function switchView() {
     toolView = !toolView;
@@ -212,7 +215,7 @@ function switchView() {
     document.getElementById('quotedWithAltHeader').innerHTML = substituteByView("Potential Alternate","Quoted With Alternate");
 
     var r = document.querySelector(':root');
-    r.style.setProperty('--primary', substituteByView("rgba(239,83,80,1)","rgba(3, 169, 244,1)"));
+    r.style.setProperty('--primary', substituteByView("rgba(239,83,80,1)","rgba(3, 169, 244,1)")); //makes view red/blue for clarity
     document.getElementById("notesLoadout").onchange();
    /* var dummy = [
         ["lowStockAdvHeader", "lowStockAdvLabel","lowStockAdvIcon"],
@@ -253,6 +256,7 @@ function clearActiveFields() {
     document.getElementById('costOption2Parent').className = 'radio-item';
     document.getElementById('costOption3Parent').className = 'radio-item';
     document.getElementById('requiresApproval').checked = false;
+    document.getElementById('requestAlternate').checked = true;
 }
 var partNumberIndex;
 var uniq;
@@ -332,6 +336,11 @@ function appendOtherNotes(tab) { //returns Other notes
     } else {
         return '';
     }
+}
+
+function onCustomerChange(customer) {
+    document.getElementById("legendCustomer").innerHTML = `${customer.value} Action Required`;
+    document.getElementById("legendDate").innerHTML = getNotePrefix().substring(0,10);
 }
 
 

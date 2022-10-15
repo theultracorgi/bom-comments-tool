@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Notify</title>
-  <link rel="shortcut icon" type="image/png" href="resources/images/favicon.png"/>
+  <link rel="shortcut icon" type="image/png" href="resources/images/favicon.png" />
 
   <link rel="stylesheet" href="main.css">
   <link rel="stylesheet" href="content.css">
@@ -27,19 +27,20 @@
   <div id="topNavBar">
     <!--TOP NAV BAR-->
     <div style="display: flex;">
-    <button style="padding-left: .125em;" class="navBarIcons" id="switchView" onclick="switchView()">
-      <span id="viewIcon" class="material-icons">
-        format_quote
+      <button style="padding-left: .125em;" class="navBarIcons" id="switchView" onclick="switchView()">
+        <span id="viewIcon" class="material-icons">
+          format_quote
+        </span>
+      </button>
+      <h1 id="navBarLabel" style="justify-content: flex-start;">Favorites</h1>
+    </div>
+    <button class="navBarIcons" id="octopartLookup" oncontextmenu="onOctopartLookupClick(true); return false"
+      onclick="onOctopartLookupClick(false)">
+      <span id="octopartLookupIcon" class="material-icons">
+        filter_8
       </span>
     </button>
-    <h1 id="navBarLabel" style="justify-content: flex-start;">Favorites</h1>
-   </div> 
-   <button class="navBarIcons" id="octopartLookup" oncontextmenu="onOctopartLookupClick(true); return false" onclick="onOctopartLookupClick(false)">
-    <span id="octopartLookupIcon" class="material-icons">
-      filter_8
-    </span>
-  </button>
-    <button style="padding-right: .125em;"class="navBarIcons" id="clearFields" onclick="clearActiveFields()">
+    <button style="padding-right: .125em;" class="navBarIcons" id="clearFields" onclick="clearActiveFields()">
       <span class="material-icons">
         backspace
       </span>
@@ -122,9 +123,9 @@
             <span class="material-icons-outlined">
               production_quantity_limits
             </span>
-            <h2>Low Stock</h2>
-            <input id="lowStock" placeholder="Stock" class="inline-input" style="width: 7.5em;">
-            <button class="copy-button" onclick="onLowStockClick(lowStock)">
+            <h2>Limited Stock</h2>
+            <input id="limitedStock" placeholder="Stock" class="inline-input" style="width: 6.0em;">
+            <button class="copy-button" onclick="onLimitedStockClick(limitedStock)">
               <span class="material-icons-outlined">
                 content_copy
               </span>
@@ -172,7 +173,8 @@
           <div class="inline-input-parent">
             <input id="sourceableQTY" placeholder="Build QTY" class="stacked-input"
               style="width:50%; margin-right: .125em;">
-            <input id="higherQTYLT" placeholder="LT in weeks" class="stacked-input" style="width:50%; margin-left:.125em;">
+            <input id="higherQTYLT" placeholder="LT in weeks" class="stacked-input"
+              style="width:50%; margin-left:.125em;">
           </div>
         </div>
         <!--STOCK WITH LEAD TIME-->
@@ -293,14 +295,15 @@
           </div>
           <input id="alternateApprovedInput" placeholder="Note" class="stacked-input">
         </div>
-         <!--CUSTOMER Approval-->
-         <div id="afc" style="display: inherit;">
+        <!--CUSTOMER Approval-->
+        <div id="afc" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined">
               assistant
             </span>
             <h2 id="approvalFromCustomerHeader">Approval From Customer</h2>
-            <button class="copy-button" onclick="onApprovalFromCustomerClick(approvalFromCustomerInput, customer.value)">
+            <button class="copy-button"
+              onclick="onApprovalFromCustomerClick(approvalFromCustomerInput, customer.value)">
               <span class="material-icons-outlined">
                 content_copy
               </span>
@@ -375,8 +378,8 @@
             production_quantity_limits
           </span>
           <div class="adv-label">
-            <h2 id="lowStockAdvHeader">Low Stock</h2>
-            <h4 id="lowStockAdvLabel">Low (3000) stock available...</h4>
+            <h2 id="lowStockAdvHeader">Insufficient Stock</h2>
+            <h4 id="lowStockAdvLabel">Low () stock available...</h4>
           </div>
           <input id="lowStockAdv" class="inline-input-adv" placeholder=" Stock"
             oninput="updateLabels(); onAdvInputChange( lowStockAdvHeader, lowStockAdvLabel, lowStockAdvIcon)">
@@ -384,14 +387,17 @@
       </div>
       <!--BROKER PRICE-->
       <div class="stock-notice-container">
-        <div class="note-header" >
-          <span class="material-icons-outlined" id="brokerPriceAdvIcon" oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;" onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
+        <div class="note-header">
+          <span class="material-icons-outlined" id="brokerPriceAdvIcon"
+            oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;"
+            onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
             price_change
           </span>
-          <div class="adv-label" oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;" onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
-            <h2 id="brokerPriceAdvHeader" >Broker Price</h2>
+          <div class="adv-label" oncontextmenu="onHeaderClick('',brokerPriceAdvHeader,'brokers','',1);return false;"
+            onclick="onHeaderClick('',brokerPriceAdvHeader,'brokers','',0)">
+            <h2 id="brokerPriceAdvHeader">Broker Price</h2>
             <h4 id="brokerPriceAdvLabel">through int'l broker @ $45.2342</h4>
-            
+
           </div>
           <input id="brokerPriceAdv" class="inline-input-adv" placeholder=" Price"
             oninput="updateLabels(); onAdvInputChange(brokerPriceAdvHeader, brokerPriceAdvLabel, brokerPriceAdvIcon)">
@@ -447,8 +453,21 @@
           </span>
           <h2>Requires Customer Approval?</h2>
           <label class="switch">
-            <input id="requiresApproval" type="checkbox"
-              onclick="onRequiresApprovalClick(costOption2)">
+            <input id="requiresApproval" type="checkbox" onclick="onRequiresApprovalClick(costOption2)">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+
+      <!--REQUEST ALTERNATE-->
+      <div id="requestAlternateDiv" class="stock-notice-container">
+        <div class="note-header">
+          <span class="material-icons-outlined">
+            alt_route
+          </span>
+          <h2>Request Alternate?</h2>
+          <label class="switch">
+            <input id="requestAlternate" type="checkbox" onclick="onrequestAlternateClick(costOption2)">
             <span class="slider round"></span>
           </label>
         </div>
@@ -487,7 +506,7 @@
       </div>
       <!--COPY BUTTON-->
       <button id="copyAdv" class="copy-adv-fab" onclick="onCopyAdvClick()">
-        
+
         <span class="material-icons-outlined" style="padding-right: .5em;" id="copyAdvIcon">
           content_copy
         </span>
@@ -512,7 +531,8 @@
           business
         </span>
         <h2>Customer</h2>
-        <input id="customer" class="inline-input-adv" required placeholder=" Customer" >
+        <input id="customer" class="inline-input-adv" required placeholder=" Customer"
+          oninput="onCustomerChange(customer)">
       </div>
       <!--EU STOCK LEAD TIME-->
       <div class="note-header">
@@ -541,18 +561,48 @@
       <div id="custom-config" style="width: 100%; display: none;">
         <div class="page-header" style="margin-top: 1em; margin-bottom: .25em;">CUSTOM LOADOUT</div>
         <div id="custom-config-wrapper"></div>
-        
+
       </div>
       <!--COPY BUTTON-->
-      <button id="bookmarkPage" class="copy-adv-fab" onclick="onBookmarkPageClick()">
-        
+      <button id="copyExportLegend" class="copy-adv-fab" onclick="onCopyExportLegendClick()">
+
         <span class="material-icons-outlined" style="padding-right: .5em;">
-          bookmark
+          legend_toggle
         </span>
-        BOOKMARK CONFIG
+        COPY EXPORT LEGEND
       </button>
     </div>
-    
+
+    <table id="exportLegend" style="border: 2px solid black; display:none">
+
+      <style>
+        table, th, td {
+          border: 1pt solid black;
+          font-weight: bolder;
+          font-family: 'Calibri';
+          text-align: left;
+          font-size: 8pt;
+        }
+      </style>
+
+      <tr>
+        <td id="legendCustomer" style="background-color:#FFFF00">Requires Action</td>
+        <td style="background-color:#E7E6E6;">BOM Tool v1</td>
+      </tr>
+      <tr>
+        <td style="background-color:#92D050">TouchPad Electronics Action Required</td>
+        <td id="legendDate" style="background-color:#E7E6E6; border-bottom: none; font-weight: normal;">Date</td>
+      </tr>
+      <tr>
+        <td style="background-color:#00B0F0">Resolved</td>
+        <td style="background-color:#E7E6E6; border-top: none; border-bottom: none;"></td>
+      </tr>
+      <tr>
+        <td style="background-color:#FF0000; color:white;font-weight: bold;">Not Populated</td>
+        <td style="background-color:#E7E6E6; border-top: none; border-bottom: none;"></td>
+      </tr>
+    </table>
+
 
 
 

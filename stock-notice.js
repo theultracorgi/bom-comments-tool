@@ -30,6 +30,7 @@ brokers = [
 
 //EVENT LISTENER METHODS
 //
+// 5 == number of radio buttons 
 function onRadioButtonClick() { //sets radio button styles for the cost inclusion group
     for (var i = 1; i < 5; i++) {
         if (document.getElementById('costOption' + i) != event.target) {
@@ -87,6 +88,12 @@ function onRequiresApprovalClick(forceCostInclusion) { //auto selects cost inclu
     }
 }
 
+function onRequestAlternateClick(forceCostInclusion) { //auto selects cost inclusion based on customer approval state
+    if (event.target.checked == true) {
+        forceCostInclusion.checked = true;
+    }
+}
+
 function onCopyAdvClick() { //compiles final copy output
         if (hasValidInputs() && [getLowStockString(), getBrokerPriceString(), getMPQString(), getMOQString(), getLTString()].join("").length != 0) {
             var output = getNotePrefix() + getLowStockString() + getBrokerPriceString() + getMPQString();
@@ -101,6 +108,9 @@ function onCopyAdvClick() { //compiles final copy output
             } else if (getCheckedCostInclusion("costInclude").toLowerCase() !== '') {
                 output += "," + getCheckedCostInclusion("costInclude");
             } 
+            if(document.getElementById("requestAlternate").checked && !output.includes("supply or suggest")){
+                output +=  `Can ${document.getElementById("customer").value} supply or suggest alternates?`
+            }
             output += appendOtherNotes('Adv');
             navigator.clipboard.writeText(output);
         }
@@ -112,7 +122,7 @@ function getLowStockString() { //returns gramatically correct substring for Low 
     if (document.getElementById('lowStockAdv').value === '') {
         return '';
     } else {
-        return "Low (" + document.getElementById('lowStockAdv').value + ") stock available";
+        return `Insufficient (${document.getElementById('lowStockAdv').value}pc) stock available`;
     }
 }
 
@@ -186,11 +196,11 @@ function getCheckedCostInclusion(groupName) { //returns gramatically correct sub
     if (radioGroup[0].checked) {
         return "";
     } else if (radioGroup[1].checked) {
-        return substituteByView(" ", " Cost included in quote")
+        return substituteByView(" ", " Cost included in quote.")
     } else if (radioGroup[2].checked) {
-        return substituteByView(" ", " Distribution cost included in quote")
+        return substituteByView(" ", " Distribution cost included in quote.")
     } else {
-        return `${substituteByView("", " No cost included in quote")} Can ` + document.getElementById('customer').value + " supply or suggest alternates?"
+        return `${substituteByView("", " No cost included in quote.")} Can ` + document.getElementById('customer').value + " supply or suggest alternates?"
     }
 }
 

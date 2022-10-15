@@ -2,25 +2,31 @@ var timer = null;
 
 function onNoStockCopyClick(excludePricingReason, customer) { //returns note for no stock
     if (hasValidInputs()) {
-        var output = getNotePrefix() + "No stock, component LT will not meet build req., ";
+        var output; 
+
+        if(isNaN(excludePricingReason.value) || excludePricingReason.value == "") {
+           output = getNotePrefix() + "No stock, component LT will not meet build req., ";
+        } else {
+            output = getNotePrefix() + `Insufficient stock (${excludePricingReason.value}pc), component LT will not meet build req., `;
+        }
         var removeLen = 2; // this is to retain gramatical correctness when modes are switcheronied
-        if (excludePricingReason.value.length > 0) { // checks if the price is included
+
+        if (excludePricingReason.value.length > 0 && isNaN(excludePricingReason.value)) { // checks if the price is included
            
-            if(excludePricingReason.value.length >= 3 & !toolView) { //checks to sea if there is a reason the price is omitted or not
+            if(!toolView) { //checks to sea if there is a reason the price is omitted or not
                 output += excludePricingReason.value + ", no ";
-            } else if(toolView) {
+            } else {
                 output += excludePricingReason.value + ".";
                 removeLen = 0;
-            } else if (!toolView) {
-                output += "no ";
             }
             
-            if (timer != null) { // timer to clear the Price not included field 
-                window.clearTimeout(timer);
-                timer = null;
-            }
-            timer = setTimeout(function () { excludePricingReason.value = ""; }, 3000);
+           
         }
+        if (timer != null) { // timer to clear the Price not included field 
+            window.clearTimeout(timer);
+            timer = null;
+        }
+        timer = setTimeout(function () { excludePricingReason.value = ""; }, 3000);
 
         if(toolView) {
             output = output.substring(0,output.length-removeLen) + " Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav');
@@ -52,9 +58,9 @@ function onQuotedAltClick(altMFRName, altMFRPN) { // returns note for alternate 
     }
 }
 
-function onLowStockClick(lowStock) { // returns note for low stock
-    if (hasValidInputs([document.getElementById('lowStock')])) {
-        navigator.clipboard.writeText(getNotePrefix() + "Low stock (" + lowStock.value + ")" + appendOtherNotes('Fav'));
+function onLimitedStockClick(limitedStock) { // returns note for low stock
+    if (hasValidInputs([document.getElementById('limitedStock')])) {
+        navigator.clipboard.writeText(getNotePrefix() + "Limited stock (" + limitedStock.value + "pc), likely to be exhausted by time of order" + appendOtherNotes('Fav'));
     }
 }
 
