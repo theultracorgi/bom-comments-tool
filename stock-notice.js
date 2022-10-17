@@ -106,10 +106,10 @@ function onCopyAdvClick() { //compiles final copy output
             if (document.getElementById('requiresApproval').checked) {
                 output += ", is this acceptable?" + getCheckedCostInclusion("costInclude");
             } else if (getCheckedCostInclusion("costInclude").toLowerCase() !== '') {
-                output += "," + getCheckedCostInclusion("costInclude");
+                output += "." + getCheckedCostInclusion("costInclude");
             } 
             if(document.getElementById("requestAlternate").checked && !output.includes("supply or suggest")){
-                output +=  `Can ${document.getElementById("customer").value} supply or suggest alternates?`
+                output +=  ` Can ${document.getElementById("customer").value} supply or suggest alternates?`
             }
             output += appendOtherNotes('Adv');
             navigator.clipboard.writeText(output);
