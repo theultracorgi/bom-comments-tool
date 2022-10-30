@@ -1,3 +1,6 @@
+{ //INDEX
+
+
 var allOptions;
 var mkePreset;
 var custResponsePreset;
@@ -428,4 +431,364 @@ function substituteByView(textIfTrue, textIfFalse) {
     } else {
         return textIfFalse;
     }
+}
+
+}
+{ // STOCK NOTICE
+var brokersIndex;
+var brokers;
+var r;
+var varStockNoticeParams;
+
+r = document.querySelector(':root');
+
+    varStockNoticeParams = [ //lazy and don't want to do charAt to change case its just not worth. Honestly might be more efficient even
+    ["lowStock", "LowStock"],
+    ["brokerPrice", "BrokerPrice"],
+    ["mPQ", "MPQ"],
+    ["mOQ", "MOQ"],
+    ["lT", "LT"]
+]
+
+brokersIndex = 0;
+brokers = [
+    'Int\'l Broker',
+    'Win Source',
+    'LCSC',
+    'Utmel',
+    'NACSemi',
+    'Worldway',
+    'CXDA',
+    'Heisener',
+    'Quest Components',
+    'TME Electronics'
+];
+
+
+//EVENT LISTENER METHODS
+//
+// 5 == number of radio buttons 
+function onRadioButtonClick() { //sets radio button styles for the cost inclusion group
+    for (var i = 1; i < 5; i++) {
+        if (document.getElementById('costOption' + i) != event.target) {
+            document.getElementById('costOption' + i).parentNode.className = 'radio-item-deselected';
+        }
+    }
+    if(event.target.id === 'requiresApproval') {
+        document.getElementById('costOption2').parentNode.className = 'radio-item-selected';
+    } else {
+        event.target.parentNode.className = 'radio-item-selected';
+    }
+}
+
+function onAdvInputChange(header, label, icon) { //updates formatting/visible note portions for stock notice inputs
+    if (event.target.value !== '') {
+        icon.style.color = getComputedStyle(r).getPropertyValue("--primary");
+        header.style.color = getComputedStyle(r).getPropertyValue("--primary");
+        label.style.display = "block";
+    } else {
+        icon.style.color = 'black';
+        header.style.color = 'black';
+        label.style.display = "none";
+    }
+}
+
+function onHeaderClick(prefix, header, array, suffix, button){
+
+    if (button == 0) {
+        window[array + 'Index'] +=1;
+        if (window[array + 'Index'] == window[array].length){
+            window[array + 'Index'] = 0;
+        }
+    } else {
+        window[array + 'Index'] -=1;
+        if (window[array + 'Index'] == -1){
+            window[array + 'Index'] = window[array].length -1;
+        }
+    }
+   
+    header.innerHTML = prefix + window[array][window[array + 'Index']] + suffix;
+    updateLabels();
+}
+
+
+function updateLabels() { // updates labels to reflect what will be returned in the final note
+    for (var i = 0; i < varStockNoticeParams.length; i++) {
+        document.getElementById(varStockNoticeParams[i][0] + 'AdvLabel').innerHTML = window['get' + varStockNoticeParams[i][1] + 'String']();
+    }
+}
+
+function onRequiresApprovalClick(forceCostInclusion) { //auto selects cost inclusion based on customer approval state
+    if (event.target.checked == true) {
+        forceCostInclusion.checked = true;
+        onRadioButtonClick();
+    }
+}
+
+function onRequestAlternateClick(forceCostInclusion) { //auto selects cost inclusion based on customer approval state
+    if (event.target.checked == true) {
+        forceCostInclusion.checked = true;
+    }
+}
+
+function onCopyAdvClick() { //compiles final copy output
+        if (hasValidInputs() && [getLowStockString(), getBrokerPriceString(), getMPQString(), getMOQString(), getLTString()].join("").length != 0) {
+            var output = getNotePrefix() + getLowStockString() + getBrokerPriceString() + getMPQString();
+
+            if (![getMPQString(), getMOQString(), getLTString()].includes('')) {
+                output += "," + getMOQString() + "," + getLTString();
+            } else {
+                output += getMOQString() + getLTString();
+            }
+            if (document.getElementById('requiresApproval').checked) {
+                output += ", is this acceptable?" + getCheckedCostInclusion("costInclude");
+            } else if (getCheckedCostInclusion("costInclude").toLowerCase() !== '') {
+                output += "." + getCheckedCostInclusion("costInclude");
+            } 
+            if(document.getElementById("requestAlternate").checked && !output.includes("supply or suggest")){
+                output +=  ` Can ${document.getElementById("customer").value} supply or suggest alternates?`
+            }
+            output += appendOtherNotes('Adv');
+            navigator.clipboard.writeText(output);
+        }
+}
+
+//GET NOTE SUBSTRING METHODS
+//
+function getLowStockString() { //returns gramatically correct substring for Low Stock notes
+    if (document.getElementById('lowStockAdv').value === '') {
+        return '';
+    } else {
+        return `Insufficient (${document.getElementById('lowStockAdv').value}pc) stock available`;
+    }
+}
+
+function getBrokerPriceString() { //returns gramatically correct substring for Broker Pricing notes
+    if (document.getElementById('brokerPriceAdv').value === '') {
+        return '';
+    } else {
+        if (getLowStockString() !== '') {
+            return ` through ${(brokers[brokersIndex] || "int'l broker")} @ $` + document.getElementById('brokerPriceAdv').value + "/pc";
+        } else {
+            return `Stock available through ${(brokers[brokersIndex] || "int'l broker")} @ $` + document.getElementById('brokerPriceAdv').value + "/pc";
+        }
+    }
+}
+
+function getMPQString() { //returns gramatically correct substring for MPQ notes
+    if (document.getElementById('mPQAdv').value === '') {
+        return '';
+    } else {
+        if (getLowStockString() !== '' || getBrokerPriceString() !== '') {
+            return " with MPQ of " + document.getElementById('mPQAdv').value;
+        } else {
+            return "Stock available with MPQ of " + document.getElementById('mPQAdv').value;
+        }
+    }
+}
+
+function getMOQString() { //returns gramatically correct substring for MOQ notes
+    if (document.getElementById('mOQAdv').value === '') {
+        return '';
+    } else {
+        if (getMPQString() !== '' && document.getElementById('lTAdv').value === '') {
+            return " and MOQ of " + document.getElementById('mOQAdv').value;
+        } else if (getMPQString() !== '') {
+            return " MOQ of " + document.getElementById('mOQAdv').value
+        } else if (getLowStockString() !== '' || getBrokerPriceString() !== '') {
+            return " with MOQ of " + document.getElementById('mOQAdv').value;
+
+        } else {
+            return "Stock available with MOQ of " + document.getElementById('mOQAdv').value;
+        }
+    }
+}
+
+function getLTString() { //returns gramatically correct substring for LT notes
+    if (document.getElementById('lTAdv').value === '') {
+        return '';
+    } else {
+        if (document.getElementById('lTAdv').value.includes('/') || document.getElementById('lTAdv').value.includes('-')) {
+            if (getMPQString() !== '' || getMOQString() !== '') {
+                return " and expected ship date of " + document.getElementById('lTAdv').value;
+            } else if (getLowStockString() !== '' || getBrokerPriceString() !== '') {
+                return " with expected ship date of " + document.getElementById('lTAdv').value;
+            } else {
+                return "Stock expected " + document.getElementById('lTAdv').value;
+            }
+        } else {
+            if (getMPQString() !== '' || getMOQString() !== '') {
+                return " and " + document.getElementById('lTAdv').value + "w LT";
+            } else if (getLowStockString() !== '' || getBrokerPriceString() !== '') {
+                return " with " + document.getElementById('lTAdv').value + "w LT";
+            } else {
+                return "Stock available with " + document.getElementById('lTAdv').value + "w LT";
+            }
+        }
+    }
+}
+
+function getCheckedCostInclusion(groupName) { //returns gramatically correct substring for Cost Inclusion notes
+    var radioGroup = document.getElementsByName(groupName);
+    if (radioGroup[0].checked) {
+        return "";
+    } else if (radioGroup[1].checked) {
+        return substituteByView(" ", " Cost included in quote.")
+    } else if (radioGroup[2].checked) {
+        return substituteByView(" ", " Distribution cost included in quote.")
+    } else {
+        return `${substituteByView("", " No cost included in quote.")} Can ` + document.getElementById('customer').value + " supply or suggest alternates?"
+    }
+}
+
+}
+{ //FAVORITES
+
+var timer = null;
+
+function onNoStockCopyClick(excludePricingReason, customer) { //returns note for no stock
+    if (hasValidInputs()) {
+        var output; 
+
+        if(isNaN(excludePricingReason.value) || excludePricingReason.value == "") {
+           output = getNotePrefix() + "No stock, component LT will not meet build req., ";
+        } else {
+            output = getNotePrefix() + `Insufficient stock (${excludePricingReason.value}pc), component LT will not meet build req., `;
+        }
+        var removeLen = 2; // this is to retain gramatical correctness when modes are switcheronied
+
+        if (excludePricingReason.value.length > 0 && isNaN(excludePricingReason.value)) { // checks if the price is included
+           
+            if(!toolView) { //checks to sea if there is a reason the price is omitted or not
+                output += excludePricingReason.value + ", no ";
+            } else {
+                output += excludePricingReason.value + ".";
+                removeLen = 0;
+            }
+            
+           
+        }
+        if (timer != null) { // timer to clear the Price not included field 
+            window.clearTimeout(timer);
+            timer = null;
+        }
+        timer = setTimeout(function () { excludePricingReason.value = ""; }, 3000);
+
+        if(toolView) {
+            output = output.substring(0,output.length-removeLen) + " Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav');
+        } else {
+            output += "cost included in quote. Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav'); 
+        }
+        
+        navigator.clipboard.writeText(output);
+    }
+}
+
+function onEUStockCopyClick(euLeadTime) { // returns note for EU LT
+    if (hasValidInputs([euLeadTime])) {
+        navigator.clipboard.writeText(getNotePrefix() + "EU Stock with listed " + euLeadTime.value + `d transit time.${substituteByView(" Is this acceptable?","")}` + appendOtherNotes('Fav'));
+    } else {
+        document.getElementById('settings-button').click(); // focuses the settings menu which is actively highlighting an invalid EU LT field
+    }
+}
+
+function onPNNotFoundCopyClick() { // returns note for P/N not found
+    if (hasValidInputs()) {
+        navigator.clipboard.writeText(getNotePrefix() + `P/N not found, ${substituteByView("p","no cost included in quote. P")}lease confirm P/N` + appendOtherNotes('Fav'));
+    }
+}
+
+function onQuotedAltClick(altMFRName, altMFRPN) { // returns note for alternate quoted
+    if (hasValidInputs([altMFRName, altMFRPN])) {
+        navigator.clipboard.writeText(getNotePrefix() + `No stock, ${substituteByView("potential","quoted with")} alternate ` + altMFRName.value + " " + altMFRPN.value + `, is this acceptable?` + appendOtherNotes('Fav'));
+    }
+}
+
+function onLimitedStockClick(limitedStock) { // returns note for low stock
+    if (hasValidInputs([document.getElementById('limitedStock')])) {
+        navigator.clipboard.writeText(getNotePrefix() + "Limited stock (" + limitedStock.value + "pc), likely to be exhausted by time of order" + appendOtherNotes('Fav'));
+    }
+}
+
+function onSpecMismatchClick(specDesc, listedSpec, bomDesc) { // returns note for spec mismatch
+    if (hasValidInputs([specDesc, listedSpec, bomDesc])) {
+        navigator.clipboard.writeText(getNotePrefix() + "Listed " + specDesc.value + " (" + listedSpec.value + ") does not match BOM desc (" + bomDesc.value + "), please confirm P/N" + appendOtherNotes('Fav'));
+    }
+}
+
+function onSourcingPartialClick(sourceableQTY, higherQTYLT) { // returns note for sourcing partial stock
+    if (hasValidInputs([sourceableQTY, higherQTYLT]) || (hasValidInputs([sourceableQTY]) && toolView )) {
+        navigator.clipboard.writeText(getNotePrefix() + `Can source up to ` + sourceableQTY.value + ` QTY PCBAs, ${substituteByView("can customer supply or suggest alternate for remainder?","higher QTYs subject to " + higherQTYLT.value + "w LT and potential volume MOQs")}` + appendOtherNotes('Fav'));
+    }
+}
+
+function onStockWithLeadTimeClick(leadTime) {
+    if (hasValidInputs([leadTime])) {
+        if (leadTime.value.includes('d') || leadTime.value.includes('w')) {
+            navigator.clipboard.writeText(getNotePrefix() + `Stock available with ` + leadTime.value + ` LT, is this acceptable?${substituteByView(" ", " Cost included in quote")}` + appendOtherNotes('Fav'));
+        } else if (leadTime.value.includes('/') || leadTime.value.includes('-')) {
+            navigator.clipboard.writeText(getNotePrefix() + "Stock with expected ship date of " + leadTime.value + `, is this acceptable?${substituteByView(" ", " Cost included in quote")}` + appendOtherNotes('Fav'));
+        } else {
+            navigator.clipboard.writeText(getNotePrefix() + "Stock available with " + leadTime.value + `w LT, is this acceptable?${substituteByView(" ", " Cost included in quote")}` + appendOtherNotes('Fav'));
+        }
+    }
+}
+
+function onConfirmPNCorrectClick(mfrPN) {
+    if (hasValidInputs([mfrPN])) {
+        navigator.clipboard.writeText(getNotePrefix() + `${substituteByView("Sourced ", "Quoted with ")}` + mfrPN.value + ", please confirm accurate" + appendOtherNotes('Fav'));
+    }
+}
+
+function onPackagingDiscrepancyClick(charDisc,oldPackage,newPackage) {
+    if (hasValidInputs([charDisc]) && ![oldPackage.selectedIndex,newPackage.selectedIndex].includes(0) && oldPackage.selectedIndex != newPackage.selectedIndex) {
+        navigator.clipboard.writeText(getNotePrefix() + "P/N discrepancy \"" + charDisc.value + "\" due to packaging (" + oldPackage.value + " vs " + newPackage.value + ")" + appendOtherNotes('Fav'));
+    }
+}
+
+function onQuotedAsSuppliedClick(reason, customer) {
+    if (hasValidInputs([reason])) {
+        navigator.clipboard.writeText(getNotePrefix() + reason.value + ", quoted as " + customer + " supplied, please confirm" + appendOtherNotes('Fav'));
+    }
+}
+
+function onSourcingInventoryClick(inventoryLocation, inventoryQTY) {
+    if (inventoryLocation.value == "") {
+        inventoryLocation.value = null;
+    }
+    if (inventoryQTY.value == "") {
+        inventoryQTY.value = null;
+    }
+        navigator.clipboard.writeText(getNotePrefix() + `Pull ${(inventoryQTY.value || '')}pc from ${(inventoryLocation.value || 'inventory')}`.replace(" pc","") + appendOtherNotes('Fav'));
+}
+
+function onQuotedWithInventoryClick(inventoryID) {
+    if (hasValidInputs([inventoryID])) {
+        navigator.clipboard.writeText(getNotePrefix() + "No distributor stock, quoted with TPE Inventory " + inventoryID.value + appendOtherNotes('Fav'));
+    }
+}
+
+function onAlternateApprovedClick(note) {
+    if (hasValidInputs([note])) {
+        navigator.clipboard.writeText(getNotePrefix() + note.value.substring(note.value.indexOf("with alternate ") + 15, note.value.indexOf(", is this")) + " approved" + appendOtherNotes("Fav"));
+    }
+}
+
+function onApprovalFromCustomerClick(alternate, customer) {
+    if (hasValidInputs([alternate])) {
+        navigator.clipboard.writeText(getNotePrefix() + alternate.value + ` approved per ${customer}`+ appendOtherNotes("Fav"));
+    }
+}
+
+function onCustomerToSupplyClick(customer) {
+    if (hasValidInputs()) {
+        navigator.clipboard.writeText(getNotePrefix() + customer + " to supply" + appendOtherNotes("Fav"));
+    }
+}
+
+function onOtherClick(otherNotes) { // returns the custom note
+    if (hasValidInputs([otherNotes])) {
+        navigator.clipboard.writeText(getNotePrefix() + otherNotes.value);
+    }
+}
 }
