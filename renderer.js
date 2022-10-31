@@ -1,4 +1,4 @@
-{ //INDEX
+//INDEX
 
 
 var allOptions;
@@ -10,7 +10,7 @@ var quoteWidgets;
 var salesorderWidgets;
 var toolView;
 
-document.addEventListener("DOMContentLoaded", function(event) {
+
 
     allOptions = [ //List of all current widgets and associated tickers. THIS IS THE DB IT SHOULD PROBABLY BE A JSON BUT I DONT FEEL LIKE DOING THAT RIGHT NOW
     ["<BLANK>", "dum"], 
@@ -96,7 +96,7 @@ if((urlParams.get('toolView') ||"").toLowerCase()=="so") {
 
     document.getElementById("notesLoadout").value = urlParams.get('loadout') ||"default";
     document.getElementById("notesLoadout").onchange();
-});
+
 //GLOBAL FUNCTIONS
 
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
@@ -433,8 +433,8 @@ function substituteByView(textIfTrue, textIfFalse) {
     }
 }
 
-}
-{ // STOCK NOTICE
+
+// STOCK NOTICE
 var brokersIndex;
 var brokers;
 var r;
@@ -641,8 +641,8 @@ function getCheckedCostInclusion(groupName) { //returns gramatically correct sub
     }
 }
 
-}
-{ //FAVORITES
+
+ //FAVORITES
 
 var timer = null;
 
@@ -790,5 +790,4 @@ function onOtherClick(otherNotes) { // returns the custom note
     if (hasValidInputs([otherNotes])) {
         navigator.clipboard.writeText(getNotePrefix() + otherNotes.value);
     }
-}
 }
