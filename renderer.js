@@ -8,11 +8,11 @@ var salesOrderPreset;
 var numWidgetSlots;
 var quoteWidgets;
 var salesorderWidgets;
-var toolView;
+var salesOrderMode;
 
 
 
-    allOptions = [ //List of all current widgets and associated tickers. THIS IS THE DB IT SHOULD PROBABLY BE A JSON BUT I DONT FEEL LIKE DOING THAT RIGHT NOW
+allOptions = [ //List of all current widgets and associated tickers. THIS IS THE DB IT SHOULD PROBABLY BE A JSON BUT I DONT FEEL LIKE DOING THAT RIGHT NOW
     ["<BLANK>", "dum"], 
     ["No Stock", "nsk"],
     ["EU Stock", "eus"],
@@ -89,12 +89,12 @@ if(numWidgetSlots >= allOptions.length) { // makes sure there aren't more placeh
 const urlParams = new URLSearchParams(window.location.search);
 document.getElementById('initials').value = urlParams.get('user') || ""; // allows user to be predefined with URL Params
 customLoadoutWidgetGenerator();
-toolView = false; // TRUE == Sales Order, FALSE == Quote
-if((urlParams.get('toolView') ||"").toLowerCase()=="so") {
+salesOrderMode = false; // TRUE == Sales Order, FALSE == Quote
+if((urlParams.get('salesOrderMode') ||"").toLowerCase()=="so") {
     switchView();
 }
 
-    document.getElementById("notesLoadout").value = urlParams.get('loadout') ||"default";
+    document.getElementById("notesLoadout").value = urlParams.get('loadout') ||"quote";
     document.getElementById("notesLoadout").onchange();
 
 //GLOBAL FUNCTIONS
@@ -112,7 +112,7 @@ function onLoadoutPresetChange() {
     document.getElementById('custom-config').style.display = "none";
 
     switch (document.getElementById("notesLoadout").value) {
-        case 'default':
+        case 'quote':
             for (var i = 1; i < numWidgetSlots +1; i++) { //again im not stupid its just the widgets index from 1 so thats why everything starts at 1
                 document.getElementById(`widget${i}`).appendChild(document.getElementById(allOptions[i][1]));
             }
@@ -193,19 +193,19 @@ function onCopyExportLegendClick() {
   
   
     /* navigator.clipboard.writeText(`https://theultracorgi.github.io/bom-comments-tool/index.html?user=${document.getElementById('initials').value}` +
-    `&toolView=${substituteByView("so","")}&loadout=${document.getElementById('notesLoadout').value}`);
+    `&salesOrderMode=${substituteByView("so","")}&loadout=${document.getElementById('notesLoadout').value}`);
     alert('1. Right click the Bookmarks bar,\n2. Click "Add Page",\n3. "Name" whatever is most convenient\n4. Paste clipboard into URL')
 */}
 
 function switchView() {
-    toolView = !toolView;
-    if(toolView) {
+    salesOrderMode = !salesOrderMode;
+    if(salesOrderMode) {
         brokersIndex = 0;
         document.getElementById('requiresApproval').checked = true;
         onHeaderClick("",document.getElementById("brokerPriceAdvHeader"),"brokers","",0);     
     }
     document.getElementById('viewIcon').textContent = substituteByView('currency_exchange','format_quote');
-    document.getElementById("notesLoadout").value = substituteByView("salesorder","default");
+    document.getElementById("notesLoadout").value = substituteByView("salesorder","quote");
     
 
     for (var i =0; i<salesorderWidgets.length;i++) {
@@ -426,7 +426,7 @@ const buttons = document.getElementsByTagName("button");
   }
 
 function substituteByView(textIfTrue, textIfFalse) {
-  if(toolView){
+  if(salesOrderMode){
         return textIfTrue;
     } else {
         return textIfFalse;
@@ -442,7 +442,7 @@ var varStockNoticeParams;
 
 r = document.querySelector(':root');
 
-    varStockNoticeParams = [ //lazy and don't want to do charAt to change case its just not worth. Honestly might be more efficient even
+varStockNoticeParams = [ //lazy and don't want to do charAt to change case its just not worth. Honestly might be more efficient even
     ["lowStock", "LowStock"],
     ["brokerPrice", "BrokerPrice"],
     ["mPQ", "MPQ"],
@@ -635,16 +635,17 @@ function getCheckedCostInclusion(groupName) { //returns gramatically correct sub
     } else if (radioGroup[1].checked) {
         return substituteByView(" ", " Cost included in quote.")
     } else if (radioGroup[2].checked) {
-        return substituteByView(" ", " Distribution cost included in quote.")
+        return substituteByView(" ", " Authorized distributor pricing included in quote.")
     } else {
         return `${substituteByView("", " No cost included in quote.")} Can ` + document.getElementById('customer').value + " supply or suggest alternates?"
     }
 }
 
 
- //FAVORITES
+//FAVORITES
 
 var timer = null;
+
 
 function onNoStockCopyClick(excludePricingReason, customer) { //returns note for no stock
     if (hasValidInputs()) {
@@ -655,30 +656,30 @@ function onNoStockCopyClick(excludePricingReason, customer) { //returns note for
         } else {
             output = getNotePrefix() + `Insufficient stock (${excludePricingReason.value}pc), component LT will not meet build req., `;
         }
-        var removeLen = 2; // this is to retain gramatical correctness when modes are switcheronied
+        var removeLen = 2; // this is to retain gramatical correctness when in sales order mode
 
         if (excludePricingReason.value.length > 0 && isNaN(excludePricingReason.value)) { // checks if the price is included
            
-            if(!toolView) { //checks to sea if there is a reason the price is omitted or not
+            if(!salesOrderMode) { //checks to sea if there is a reason the price is omitted or not
                 output += excludePricingReason.value + ", no ";
             } else {
                 output += excludePricingReason.value + ".";
                 removeLen = 0;
             }
             
-           
+        } 
+        
+        if(!salesOrderMode) {
+            output += "cost included in quote. Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav'); 
+        } else {
+            output = output.substring(0,output.length-removeLen) + " Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav');
         }
+
         if (timer != null) { // timer to clear the Price not included field 
             window.clearTimeout(timer);
             timer = null;
         }
         timer = setTimeout(function () { excludePricingReason.value = ""; }, 3000);
-
-        if(toolView) {
-            output = output.substring(0,output.length-removeLen) + " Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav');
-        } else {
-            output += "cost included in quote. Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav'); 
-        }
         
         navigator.clipboard.writeText(output);
     }
@@ -717,7 +718,7 @@ function onSpecMismatchClick(specDesc, listedSpec, bomDesc) { // returns note fo
 }
 
 function onSourcingPartialClick(sourceableQTY, higherQTYLT) { // returns note for sourcing partial stock
-    if (hasValidInputs([sourceableQTY, higherQTYLT]) || (hasValidInputs([sourceableQTY]) && toolView )) {
+    if (hasValidInputs([sourceableQTY, higherQTYLT]) || (hasValidInputs([sourceableQTY]) && salesOrderMode )) {
         navigator.clipboard.writeText(getNotePrefix() + `Can source up to ` + sourceableQTY.value + ` QTY PCBAs, ${substituteByView("can customer supply or suggest alternate for remainder?","higher QTYs subject to " + higherQTYLT.value + "w LT and potential volume MOQs")}` + appendOtherNotes('Fav'));
     }
 }
@@ -770,8 +771,13 @@ function onQuotedWithInventoryClick(inventoryID) {
 
 function onAlternateApprovedClick(note) {
     if (hasValidInputs([note])) {
-        navigator.clipboard.writeText(getNotePrefix() + note.value.substring(note.value.indexOf("with alternate ") + 15, note.value.indexOf(", is this")) + " approved" + appendOtherNotes("Fav"));
-    }
+        if(note.value.includes("with alternate ")) { //checks if is pulling directly from alt note
+            navigator.clipboard.writeText(getNotePrefix() + note.value.substring(note.value.indexOf("with alternate ") + 15, note.value.indexOf(", is this")) + " approved" + appendOtherNotes("Fav"));
+        } else {
+            navigator.clipboard.writeText(getNotePrefix() + note.value + " approved");
+
+        }
+            }
 }
 
 function onApprovalFromCustomerClick(alternate, customer) {

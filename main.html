@@ -57,7 +57,7 @@
             <span class="material-icons-outlined">
               remove_shopping_cart
             </span>
-            <h2>No Stock</h2>
+            <h2 onclick="onNoStockTitle">No Stock</h2>
             <button class="copy-button" onclick="onNoStockCopyClick(noStockInput, customer)">
               <span class="material-icons-outlined">
                 content_copy
@@ -549,10 +549,10 @@
         </span>
         <h2>Notes Loadout</h2>
         <select name="loadout" id="notesLoadout" class="settings-select" onchange="onLoadoutPresetChange()">
-          <option value="default">Default</option>
+          <option value="quote">Quote</option>
           <option value="salesorder">Sales Order</option>
           <option value="mke">MKE</option>
-          <option value="etk">ETK</option>
+        <!--  <option value="etk">ETK</option>-->
           <option value="custresponse">Response</option>
           <option value="custom">Custom</option>
         </select>
