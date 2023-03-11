@@ -258,8 +258,13 @@ function clearActiveFields() {
     document.getElementById('costOption1Parent').className = 'radio-item'; //resets cost option styles
     document.getElementById('costOption2Parent').className = 'radio-item';
     document.getElementById('costOption3Parent').className = 'radio-item';
-    document.getElementById('requiresApproval').checked = false;
     document.getElementById('requestAlternate').checked = true;
+
+    if(salesOrderMode) {
+        document.getElementById('requiresApproval').checked = true;
+    } else {
+        document.getElementById('requiresApproval').checked = false;
+    }
 }
 var partNumberIndex;
 var uniq;
@@ -345,7 +350,6 @@ function onCustomerChange(customer) {
     document.getElementById("legendCustomer").innerHTML = `${customer.value} Action Required`;
     document.getElementById("legendDate").innerHTML = getNotePrefix().substring(0,10);
 }
-
 
 function customLoadoutWidgetGenerator () {
 
@@ -511,7 +515,6 @@ function onHeaderClick(prefix, header, array, suffix, button){
     updateLabels();
 }
 
-
 function updateLabels() { // updates labels to reflect what will be returned in the final note
     for (var i = 0; i < varStockNoticeParams.length; i++) {
         document.getElementById(varStockNoticeParams[i][0] + 'AdvLabel').innerHTML = window['get' + varStockNoticeParams[i][1] + 'String']();
@@ -635,7 +638,7 @@ function getCheckedCostInclusion(groupName) { //returns gramatically correct sub
     } else if (radioGroup[1].checked) {
         return substituteByView(" ", " Cost included in quote.")
     } else if (radioGroup[2].checked) {
-        return substituteByView(" ", " Authorized distributor pricing included in quote.")
+        return substituteByView(" ", ` Authorized distributor pricing included in quote.`)
     } else {
         return `${substituteByView("", " No cost included in quote.")} Can ` + document.getElementById('customer').value + " supply or suggest alternates?"
     }

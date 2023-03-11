@@ -482,3 +482,9 @@ ITEM OPACITY
         opacity: 0;
       }
     }
+
+    iframe {
+        padding:0px;
+        margin:0px;
+        overflow: hidden;
+       }

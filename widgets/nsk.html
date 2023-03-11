@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="stylesheet" href="../main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body style="margin:0px">
+<div id="nsk" style="display: inherit;">
+    <div class="note-header">
+      <span class="material-icons-outlined">
+        remove_shopping_cart
+      </span>
+      <h2 onclick="onNoStockTitle">No Stock</h2>
+      <button class="copy-button" onclick="onNoStockCopyClick(noStockInput, customer)">
+        <span class="material-icons-outlined">
+          content_copy
+        </span>
+        COPY
+      </button>
+
+    </div>
+    <input id="noStockInput" placeholder="Reason pricing N/A (if app)" class="stacked-input">
+  </div>
+  <script>
+function onNoStockCopyClick(excludePricingReason, customer) { //returns note for no stock
+    if (hasValidInputs()) {
+        var output; 
+
+        if(isNaN(excludePricingReason.value) || excludePricingReason.value == "") {
+           output = getNotePrefix() + "No stock, component LT will not meet build req., ";
+        } else {
+            output = getNotePrefix() + `Insufficient stock (${excludePricingReason.value}pc), component LT will not meet build req., `;
+        }
+        var removeLen = 2; // this is to retain gramatical correctness when in sales order mode
+
+        if (excludePricingReason.value.length > 0 && isNaN(excludePricingReason.value)) { // checks if the price is included
+           
+            if(!salesOrderMode) { //checks to sea if there is a reason the price is omitted or not
+                output += excludePricingReason.value + ", no ";
+            } else {
+                output += excludePricingReason.value + ".";
+                removeLen = 0;
+            }
+            
+        } 
+        
+        if(!salesOrderMode) {
+            output += "cost included in quote. Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav'); 
+        } else {
+            output = output.substring(0,output.length-removeLen) + " Can " + customer.value + " supply or suggest alternates?" + appendOtherNotes('Fav');
+        }
+
+        if (timer != null) { // timer to clear the Price not included field 
+            window.clearTimeout(timer);
+            timer = null;
+        }
+        timer = setTimeout(function () { excludePricingReason.value = ""; }, 3000);
+        
+        navigator.clipboard.writeText(output);
+    }
+}
+
+  </script>
+</body>
