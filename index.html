@@ -7,7 +7,7 @@
   <script>
 
     const urlParams = new URLSearchParams(window.location.search);
-    var newWin = window.open('main.html?user=' + (urlParams.get('user') || "") + "&salesOrderMode="+ (urlParams.get('salesOrderMode') || "") +"&loadout="+(urlParams.get('loadout')||""),'BOM Comments Tool','height=1080,width=360');
+    var newWin = window.open('main.html?user=' + (urlParams.get('user') || "") + "&salesOrderMode="+ (urlParams.get('toolView') || "") +"&loadout="+(urlParams.get('loadout')||""),'BOM Comments Tool','height=1080,width=360');
     if(!newWin || newWin.closed || typeof newWin.closed=='undefined') { 
     //POPUP BLOCKED
     } else {
