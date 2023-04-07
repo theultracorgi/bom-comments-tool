@@ -29,7 +29,16 @@ allOptions = [ //List of all current widgets and associated tickers. THIS IS THE
     ["Alternate Approved", "caa"],
     ["Customer Approval", "afc"],
     ["Sourcing From Inventory", "sfi"],
-    ["Customer Supplied", "cts"]
+    ["Customer Supplied", "cts"],
+    //Receiving Mode
+    ["Rec'd Alternate", "rca"],
+    ["Unprotected MSL", "msl"],
+    ["Top Marking Unverifiable", "tmu"],
+    ["Short Parts", "shp"],
+    ["Rec'd Exact QTY", "eqt"],
+    ["Didn't Receive Line", "drl"],
+    ["Added Alt Package", "aap"],
+    ["Label/BOM Mismatch", "lbm"]
     
 ];
 
@@ -66,6 +75,19 @@ salesOrderPreset = [
     ["Sourcing Partial", "srp"],
     ["Customer Approval", "afc"],
     ["Customer Supplied", "cts"]
+    
+];
+
+incomingPreset = [
+    ["<BLANK>", "dum"], 
+    ["Rec'd Alternate", "rca"],
+    ["Unprotected MSL", "msl"],
+    ["Top Marking Unverifiable", "tmu"],
+    ["Short Parts", "shp"],
+    ["Rec'd Exact QTY", "eqt"],
+    ["Didn't Receive Line", "drl"],
+    ["Added Alt Package", "aap"],
+    ["Label/BOM Mismatch", "lbm"]
     
 ];
 
@@ -139,6 +161,14 @@ function onLoadoutPresetChange() {
             }
             hideEmptyWidgets();
             break;
+        case 'incoming':
+            document.getElementById('customer').value = "NA";
+            for (var i = 1; i < incomingPreset.length; i++) { //no clue why i dont need to add 1 to the length, i think it has something to do with the dummy
+                document.getElementById(`widget${i}`).appendChild(document.getElementById(incomingPreset[i][1]));
+            }
+            
+            hideEmptyWidgets();
+            break;    
         case 'custom':
             document.getElementById('custom-config').style.display = "block";
             for (var i = 1; i < numWidgetSlots +1; i++) {
@@ -792,6 +822,59 @@ function onApprovalFromCustomerClick(alternate, customer) {
 function onCustomerToSupplyClick(customer) {
     if (hasValidInputs()) {
         navigator.clipboard.writeText(getNotePrefix() + customer + " to supply" + appendOtherNotes("Fav"));
+    }
+}
+
+function onRecdAlternateClick(alternate) {
+    if (hasValidInputs([alternate])) {
+        navigator.clipboard.writeText(getNotePrefix() + `Rec'd ${alternate.value}, is this acceptable?` + appendOtherNotes("Fav"));
+    }
+}
+
+function onMSLLevelClick(mslLevel) {
+    if (hasValidInputs()) {
+        navigator.clipboard.writeText(getNotePrefix() + `Part is MSL ${mslLevel.value}, is baking required?` + appendOtherNotes("Fav"));
+    }
+}
+
+function onTopMarkingUnverifiableClick(actualTopMarking, datasheetTopMarking) {
+    if (hasValidInputs([actualTopMarking])) {
+        if(datasheetTopMarking.value === '') {
+            navigator.clipboard.writeText(getNotePrefix() + `Part marking on rec'd component "${actualTopMarking.value}" not verifiable against datasheet, is this acceptable?` + appendOtherNotes("Fav"));
+        } else {
+            navigator.clipboard.writeText(getNotePrefix() + `Part marking on rec'd component "${actualTopMarking.value}" does not match datasheet "${datasheetTopMarking.value}", is this acceptable?` + appendOtherNotes("Fav"));
+        }
+    }
+        
+}
+
+function onShortPartsClick() {
+    if (hasValidInputs()) {
+        navigator.clipboard.writeText(getNotePrefix() + `Short parts` + appendOtherNotes("Fav"));
+    }
+}
+
+function onRecdExactQTYClick() {
+    if (hasValidInputs()) {
+        navigator.clipboard.writeText(getNotePrefix() + `Rec'd exact QTY` + appendOtherNotes("Fav"));
+    }
+}
+
+function onDidntReceiveLineClick() {
+    if (hasValidInputs()) {
+        navigator.clipboard.writeText(getNotePrefix() + `Didn't receive` + appendOtherNotes("Fav"));
+    }
+}
+
+function onAddedAltPackageClick(alternate) {
+    if (hasValidInputs([alternate])) {
+        navigator.clipboard.writeText(getNotePrefix() + `Added ${alternate.value}, packaging` + appendOtherNotes("Fav"));
+    }
+}
+
+function onLabelBOMMismatchClick(labelText, mismatchType) {
+    if (hasValidInputs([labelText, mismatchType])) {
+        navigator.clipboard.writeText(getNotePrefix() + `Rec'd ${labelText.value}, ${mismatchType.value} mismatch` + appendOtherNotes("Fav"));
     }
 }
 
