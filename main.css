@@ -173,6 +173,7 @@ ITEM OPACITY
       padding-left: 6px;
       white-space: nowrap;
       overflow: hidden;
+      user-select: none;
   }
   
   h2 {
@@ -186,12 +187,17 @@ ITEM OPACITY
   label {
       font-size: .9375em;
   }
+
+  .h2-icon {
+    user-select: none;
+  }
   
   .adv-label h2, .adv-label h4 {
       margin: .0625em;
   }
   .adv-label h2{
       display: block;
+      user-select: none;
   }
   
   .adv-label h4 {
@@ -199,6 +205,7 @@ ITEM OPACITY
       word-wrap: normal;
       white-space: normal;
       width:calc(100%-9.5em);
+      user-select: none;
   }
   
   .page-header {
