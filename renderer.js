@@ -113,7 +113,7 @@ document.getElementById('initials').value = urlParams.get('user') || ""; // allo
 customLoadoutWidgetGenerator();
 salesOrderMode = false; // TRUE == Sales Order, FALSE == Quote
 if((urlParams.get('salesOrderMode') ||"").toLowerCase()=="so") {
-    document.getElementById('switchView').click();
+var switchViewTimer = setTimeout(function () { document.getElementById('switchView').click(); }, 1250);
 }
 
     document.getElementById("notesLoadout").value = urlParams.get('loadout') ||"quote";
@@ -314,7 +314,7 @@ async function onOctopartLookupClick(buttonFunction) {
         partNumberIndex = -1;
 
 
-        if (timer != null) { // timer to clear the Price not included field 
+        if (timer != null) { // timer to reset icon
             window.clearTimeout(timer);
             timer = null;
         }
