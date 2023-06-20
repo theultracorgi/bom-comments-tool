@@ -216,7 +216,7 @@ ITEM OPACITY
       width: 100%;
   }
   
-  .favorite-note-container, .stock-notice-container {
+  .favorite-note-container, .stock-notice-container, .price-break-popup-container  {
       padding: .5em 0em;
       display: block;
   }
@@ -224,6 +224,17 @@ ITEM OPACITY
   .favorite-note-container {
       width:20.5em;
   }
+
+  .price-break-popup-container {
+    width: 18.0em;
+    background-color: white;
+    border-radius: 1em;
+    position: fixed;
+    right: 2.5em;
+    top:3.5em;
+    z-index: 1;
+  }
+
   .note-header {
       display: flex;
       align-items: center;
@@ -289,6 +300,10 @@ ITEM OPACITY
   #custom-config-wrapper select {
       width: 16em;
       margin-left:auto;
+  }
+
+  .inline-input-price-breaks {
+    margin-left: 0em;
   }
   
   .inline-input {

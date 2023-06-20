@@ -113,7 +113,7 @@ document.getElementById('initials').value = urlParams.get('user') || ""; // allo
 customLoadoutWidgetGenerator();
 salesOrderMode = false; // TRUE == Sales Order, FALSE == Quote
 if((urlParams.get('salesOrderMode') ||"").toLowerCase()=="so") {
-var switchViewTimer = setTimeout(function () { document.getElementById('switchView').click(); }, 1250);
+var switchViewTimer = setTimeout(function () { document.getElementById('switchView').click(); }, 1000);
 }
 
     document.getElementById("notesLoadout").value = urlParams.get('loadout') ||"quote";
@@ -122,8 +122,142 @@ var switchViewTimer = setTimeout(function () { document.getElementById('switchVi
 //GLOBAL FUNCTIONS
 
 //document.getElementById('initials').value = urlParams.get('mode') || ""; // allows user to be predefined with URL Params
-
  //All my loops start at 1 and im not stupid its just the widgets all increment from 1 and it happened to work out that I needed a dummy element
+
+var pricingParseWindow = false;
+
+const upscaler = new Upscaler();
+async function onPricingFormatClick() {
+    var newitem;
+     // Get the data of clipboard
+    const item_list = await navigator.clipboard.read();
+    let image_type; // we will feed this later
+    const item = item_list.find( item => // choose the one item holding our image
+      item.types.some( type => { // does this item have our type
+        if(type.startsWith( 'image/' ) ) {
+          image_type = type; // store which kind of image type it is
+        }
+        return true; 
+      } )
+    );
+
+
+    if( image_type !== undefined) {
+        const blob = await item.getType(image_type);
+        var objectURL = URL.createObjectURL(blob);
+
+ 
+       console.log("Upscaling...");
+       const objectURL2x = await upscaler.upscale(objectURL, {
+        patchSize: 128,
+        padding: 2,
+      });
+       console.log("Upscale Success");
+      
+            const worker = await Tesseract.createWorker();
+            await worker.loadLanguage('eng');
+            await worker.initialize('eng');
+            await worker.setParameters({
+              tessedit_char_whitelist: '0123456789.,$+: ',
+              tessedit_pageseg_mode: 4, //idk this is the best one. 12
+            });
+  
+              const ret = await worker.recognize(objectURL2x);
+              console.log(ret.data.text);
+              newitem = ret.data.text;
+  
+            //const { data: { text } } = await worker.recognize(blob);
+          
+            await worker.terminate();       
+    
+          document.getElementById("pricingFormatIcon").innerHTML = "check"; 
+      } else {
+        const blob = await item.getType('text/plain');
+        newitem = await blob.text();
+        document.getElementById("pricingFormatIcon").innerHTML = "check";
+      }
+
+      console.log("Raw Data: \n" + newitem);
+
+      var rowDelimiter = String.fromCharCode(9);
+      var lineDelimiter = String.fromCharCode(10);
+    
+      //pure cleanses
+     newitem = newitem.replaceAll("+", "");
+     newitem = newitem.replaceAll("US", "");
+     newitem = newitem.replaceAll(",", "");
+    // newitem = newitem.replace(/ §/g, " $");
+
+     newitem = newitem.replaceAll(String.fromCharCode(13), lineDelimiter);
+     newitem = newitem.replaceAll(" ", rowDelimiter);
+     
+     newitem = newitem.replaceAll(rowDelimiter + "$", "$");
+     newitem = newitem.replaceAll("$" + rowDelimiter, "$");
+     newitem = newitem.replaceAll("$$", "$");
+     newitem = newitem.replaceAll("$", rowDelimiter + "$");
+
+     while (newitem.includes(rowDelimiter + rowDelimiter) || newitem.includes(lineDelimiter + lineDelimiter) || newitem.includes("$$", "$")) {
+        
+        newitem = newitem.replaceAll("$$", "$")
+        newitem = newitem.replaceAll(rowDelimiter + rowDelimiter, rowDelimiter);
+        newitem = newitem.replaceAll(lineDelimiter + lineDelimiter, lineDelimiter);
+    }
+ 
+     if(newitem.charCodeAt(newitem.length-1) == 10) {
+        newitem = newitem.substring(0, newitem.length-1);
+     }
+
+     console.log("Cleansed Data: \n" + newitem);
+     var priceBreakArray =  newitem.split(lineDelimiter).map(function(x){return x.split(rowDelimiter)});
+
+     if(priceBreakArray[0][2] !== undefined) {
+        for (var i = 0; i < priceBreakArray.length; i++) {
+            priceBreakArray[i][2] = "";
+        }
+        
+     }    
+     /* dont need this because i added upscaler so it actually gets the numbers correct
+     for (var i = 0; i < priceBreakArray.length; i++) {
+         if(!priceBreakArray[i][1].includes(".")) {
+            
+             if (priceBreakArray[i][1].charAt(1) == "0") {
+                priceBreakArray[i][1] = "$0." + priceBreakArray[i][1].substring(2);
+             } else {
+                priceBreakArray[i][1] = priceBreakArray[i][1].substring(0, priceBreakArray[i][1].length-2) + "." + priceBreakArray[i][1].substring(priceBreakArray[i][1].length-2);
+             }
+         }  
+     }
+     */
+
+     //shortens array to fit within price break limits
+
+
+    var tokens2 = priceBreakArray.map(e => e.join(rowDelimiter)).join(rowDelimiter);
+
+    while (tokens2.includes(rowDelimiter + rowDelimiter)) {
+        tokens2 = tokens2.replaceAll(rowDelimiter + rowDelimiter, rowDelimiter);
+    }
+
+    ;
+    var output = tokens2.split(rowDelimiter).slice(0, 12).join(rowDelimiter);
+
+     while (output.includes(rowDelimiter + rowDelimiter)) {
+         output = output.replaceAll(rowDelimiter + rowDelimiter, rowDelimiter);
+     }
+     if(output.charCodeAt(output.length-1) == 10) {
+        output = output.substring(0, output.length-1);
+     }
+   
+
+     //this is the dumbest thing I need for testing. When i manually grant clipboard permission, the perms popup unfocuses the window. when its reading image contents, the tesseract
+    //processing is long enough to regain focus, but when its just text it processes too fast and can't re-focus itself in time. Delete this before pushing
+  //  setTimeout(() => {
+        navigator.clipboard.writeText(output);
+        document.getElementById("pricingFormatIcon").innerHTML = "format_list_numbered"; 
+        console.log("Success! \n" + output);
+ //   }, 500);
+    }
+
 
 function onLoadoutPresetChange() {
     for (var i = 1; i < numWidgetSlots +1; i++) {
@@ -301,7 +435,7 @@ var uniq;
 var octopartIcon = document.getElementById("octopartLookupIcon");
 
 
-async function onOctopartLookupClick(buttonFunction) {
+async function onWebLookupClick(websitePrefix, buttonFunction, websiteSuffix) {
     
     if (buttonFunction) {
         var clipText = await navigator.clipboard.readText();
@@ -326,7 +460,7 @@ async function onOctopartLookupClick(buttonFunction) {
         if (partNumberIndex== uniq.length){
             partNumberIndex = 0;
         }
-        window.open(`https://octopart.com/search?q=${uniq[partNumberIndex]}`);
+        window.open(websitePrefix + uniq[partNumberIndex] + websiteSuffix);
 }
 
 function getNotePrefix() { // returns note prefix in format: 'YYYY-MM-DD FL:'

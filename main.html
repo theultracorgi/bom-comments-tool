@@ -13,7 +13,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,0" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+<!-- v4 -->
+<script src='https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@upscalerjs/default-model@latest/dist/umd/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/upscaler@latest/dist/browser/umd/upscaler.min.js"></script>
 
+
+ 
   <script>
     $(document).ready(function () {
       $("#tabs").tabs({ active: 'favorite-notes' });
@@ -30,26 +37,52 @@
           format_quote
         </span>
       </button>
-      <h1 id="navBarLabel" style="justify-content: flex-start;">Favorites</h1>
+      <h1 id="navBarLabel" style="justify-content: flex-start;" onclick="temp()">Favorites</h1>
     </div>
-    <button class="navBarIcons" id="octopartLookup" oncontextmenu="onOctopartLookupClick(true); return false"
-      onclick="onOctopartLookupClick(false)">
+
+    
+
+    
+    <button class="navBarIcons" id="octopartLookup" oncontextmenu="onWebLookupClick('https:\/\/octopart.com\/search?q=', true, ''); return false"
+      onclick="onWebLookupClick(false)">
       <span id="octopartLookupIcon" class="material-icons">
         filter_8
       </span>
     </button>
+
+    <button class="navBarIcons" id="octopartLookup" onclick="onPricingFormatClick()">
+      <span id="pricingFormatIcon" class="material-icons">
+        format_list_numbered
+      </span>
+    </button>
+  <!--   <button class="navBarIcons" id="findchipsLookup" oncontextmenu="onWebLookupClick('https:\/\/www.oemstrade.com\/search\/', true, ''); return false"
+      onclick="onWebLookupClick(false)">
+      <span id="octopartLookupIcon" class="material-icons">
+        filter_8
+      </span>
+    </button>
+    <button class="navBarIcons" id="oemstradeLookup" oncontextmenu="onWebLookupClick('https:\/\/www.findchips.com\/search\/', true, ''); return false"
+      onclick="onWebLookupClick(false)">
+      <span id="octopartLookupIcon" class="material-icons">
+        filter_8
+      </span>
+    </button> -->
     <button style="padding-right: .125em;" class="navBarIcons" id="clearFields" onclick="clearActiveFields()">
       <span class="material-icons">
         backspace
       </span>
-    </button>
+    </button> 
   </div>
+
 
   <div id="tabs">
     <div id="favorite-notes" class="favorite-notes-content">
       <!--COMMON NOTES-->
       <div class="page-header">COMMON NOTES</div>
+
       <div id="widgetHolder" style="display: none;">
+
+        
         <!--NO STOCK-->
         <div id="nsk" style="display: inherit;">
           <div class="note-header">
@@ -67,6 +100,7 @@
           </div>
           <input id="noStockInput" placeholder="Reason pricing N/A (if app)" class="stacked-input">
         </div>
+        
         <!--EU STOCK-->
         <div id="eus" style="display: inherit;">
           <div class="note-header">
