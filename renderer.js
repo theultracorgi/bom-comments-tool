@@ -128,6 +128,8 @@ var pricingParseWindow = false;
 
 const upscaler = new Upscaler();
 async function onPricingFormatClick() {
+
+    document.getElementById("pricingFormatIcon").innerHTML = "more_horiz"; 
     var newitem;
      // Get the data of clipboard
     const item_list = await navigator.clipboard.read();
