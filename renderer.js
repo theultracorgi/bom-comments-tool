@@ -253,8 +253,11 @@ async function onPricingFormatClick() {
     //processing is long enough to regain focus, but when its just text it processes too fast and can't re-focus itself in time. Delete this before pushing
   //  setTimeout(() => {
         navigator.clipboard.writeText(output);
-        document.getElementById("pricingFormatIcon").innerHTML = "format_list_numbered"; 
+        
         console.log("Success! \n" + output);
+       setTimeout(() => { // so people can actually tell when it worked
+         document.getElementById("pricingFormatIcon").innerHTML = "format_list_numbered"; 
+       }, 1000);
  //   }, 500);
     }
 
