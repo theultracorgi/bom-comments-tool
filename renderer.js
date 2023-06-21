@@ -130,7 +130,7 @@ const upscaler = new Upscaler();
 async function onPricingFormatClick() {
 
     document.getElementById("pricingFormatIcon").innerHTML = "more_horiz"; 
-    var newitem;
+    var rawBlobText;
      // Get the data of clipboard
     const item_list = await navigator.clipboard.read();
     let image_type; // we will feed this later
@@ -165,105 +165,83 @@ async function onPricingFormatClick() {
             });
   
               const ret = await worker.recognize(objectURL2x);
-              console.log(ret.data.text);
-              newitem = ret.data.text;
+              rawBlobText = ret.data.text;
   
             //const { data: { text } } = await worker.recognize(blob);
           
             await worker.terminate();       
     
-          document.getElementById("pricingFormatIcon").innerHTML = "check"; 
       } else {
         const blob = await item.getType('text/plain');
-        newitem = await blob.text();
+        rawBlobText = await blob.text();
         document.getElementById("pricingFormatIcon").innerHTML = "check";
       }
 
-      console.log("Raw Data: \n" + newitem);
+      console.log("Raw Data: \n" + rawBlobText);
 
       var rowDelimiter = String.fromCharCode(9);
       var lineDelimiter = String.fromCharCode(10);
     
       //pure cleanses
-     newitem = newitem.replaceAll("+", "");
-     newitem = newitem.replaceAll("US", "");
-     newitem = newitem.replaceAll(",", "");
-    // newitem = newitem.replace(/ §/g, " $");
 
-     newitem = newitem.replaceAll(String.fromCharCode(13), lineDelimiter);
-     newitem = newitem.replaceAll(" ", rowDelimiter);
-     
-     newitem = newitem.replaceAll(rowDelimiter + "$", "$");
-     newitem = newitem.replaceAll("$" + rowDelimiter, "$");
-     newitem = newitem.replaceAll("$$", "$");
-     newitem = newitem.replaceAll("$", rowDelimiter + "$");
-
-     while (newitem.includes(rowDelimiter + rowDelimiter) || newitem.includes(lineDelimiter + lineDelimiter) || newitem.includes("$$", "$")) {
-        
-        newitem = newitem.replaceAll("$$", "$")
-        newitem = newitem.replaceAll(rowDelimiter + rowDelimiter, rowDelimiter);
-        newitem = newitem.replaceAll(lineDelimiter + lineDelimiter, lineDelimiter);
+    var priceBreakSubArray  = [
+     ["+", ""],
+     ["US", ""],
+     [",", ""],
+     [String.fromCharCode(13), lineDelimiter],
+     [" ", rowDelimiter],
+     [rowDelimiter + "$", "$"],
+     ["$" + rowDelimiter, "$"],
+     ["$$", "$"],
+     ["$", rowDelimiter + "$"]   
+    ];
+    for(var i = 0; i < priceBreakSubArray.length; i++) {
+        rawBlobText = rawBlobText.replaceAll(priceBreakSubArray[i][0],priceBreakSubArray[i][1]);
     }
+     rawBlobText = rawBlobText.removeStringDup("$");
+     rawBlobText = rawBlobText.removeStringDup(rowDelimiter);
+     rawBlobText = rawBlobText.removeStringDup(lineDelimiter);
+    
+     rawBlobText = rawBlobText.trimNewLines();
  
-     if(newitem.charCodeAt(newitem.length-1) == 10) {
-        newitem = newitem.substring(0, newitem.length-1);
-     }
+     console.log("Cleansed Data: \n" + rawBlobText);
 
-     console.log("Cleansed Data: \n" + newitem);
-     var priceBreakArray =  newitem.split(lineDelimiter).map(function(x){return x.split(rowDelimiter)});
+     var priceBreakArray =  rawBlobText.split(lineDelimiter).map(function(x){return x.split(rowDelimiter)});
 
      if(priceBreakArray[0][2] !== undefined) {
         for (var i = 0; i < priceBreakArray.length; i++) {
             priceBreakArray[i][2] = "";
         }
         
-     }    
-     /* dont need this because i added upscaler so it actually gets the numbers correct
-     for (var i = 0; i < priceBreakArray.length; i++) {
-         if(!priceBreakArray[i][1].includes(".")) {
-            
-             if (priceBreakArray[i][1].charAt(1) == "0") {
-                priceBreakArray[i][1] = "$0." + priceBreakArray[i][1].substring(2);
-             } else {
-                priceBreakArray[i][1] = priceBreakArray[i][1].substring(0, priceBreakArray[i][1].length-2) + "." + priceBreakArray[i][1].substring(priceBreakArray[i][1].length-2);
-             }
-         }  
-     }
-     */
-
+     }  
      //shortens array to fit within price break limits
+    var tempVal = priceBreakArray.map(e => e.join(rowDelimiter)).join(rowDelimiter);
+    tempVal = tempVal.removeStringDup(rowDelimiter);
+    var output = tempVal.split(rowDelimiter).slice(0, 12).join(rowDelimiter);
 
+    output = output.removeStringDup(rowDelimiter);
+    output.trimNewLines();
 
-    var tokens2 = priceBreakArray.map(e => e.join(rowDelimiter)).join(rowDelimiter);
-
-    while (tokens2.includes(rowDelimiter + rowDelimiter)) {
-        tokens2 = tokens2.replaceAll(rowDelimiter + rowDelimiter, rowDelimiter);
-    }
-
-    ;
-    var output = tokens2.split(rowDelimiter).slice(0, 12).join(rowDelimiter);
-
-     while (output.includes(rowDelimiter + rowDelimiter)) {
-         output = output.replaceAll(rowDelimiter + rowDelimiter, rowDelimiter);
-     }
-     if(output.charCodeAt(output.length-1) == 10) {
-        output = output.substring(0, output.length-1);
-     }
-   
-
-     //this is the dumbest thing I need for testing. When i manually grant clipboard permission, the perms popup unfocuses the window. when its reading image contents, the tesseract
-    //processing is long enough to regain focus, but when its just text it processes too fast and can't re-focus itself in time. Delete this before pushing
-  //  setTimeout(() => {
-        navigator.clipboard.writeText(output);
-        
+    try {
+        await navigator.clipboard.writeText(output)
         console.log("Success! \n" + output);
+        document.getElementById("pricingFormatIcon").innerHTML = "check"; 
        setTimeout(() => { // so people can actually tell when it worked
          document.getElementById("pricingFormatIcon").innerHTML = "format_list_numbered"; 
-       }, 1000);
- //   }, 500);
+       }, 1500);
+    } catch (error) {
+        document.getElementById("pricingFormatIcon").innerHTML = "priority_high";
+        document.addEventListener("click", function() {
+            navigator.clipboard.writeText(output);
+            console.log("Success! \n" + output);
+            document.getElementById("pricingFormatIcon").innerHTML = "check"; 
+           setTimeout(() => { // so people can actually tell when it worked
+             document.getElementById("pricingFormatIcon").innerHTML = "format_list_numbered"; 
+           }, 1500);
+        }, {once : true});
+
+       } 
     }
-
-
 function onLoadoutPresetChange() {
     for (var i = 1; i < numWidgetSlots +1; i++) {
         if (document.getElementById(`widget${i}`).lastChild) {
@@ -506,7 +484,6 @@ function hasValidInputs(extraParamsArray) { // checks if customer and initials a
     return returnValue;
 }
 
-
 function appendOtherNotes(tab) { //returns Other notes
     if (document.getElementById('otherNotes' + tab).value !== '') {
         return "\n\n" + document.getElementById('otherNotes' + tab).value;
@@ -591,7 +568,7 @@ function createRipple(event) {
     }
   
     button.appendChild(circle);
-  }
+}
   
 const buttons = document.getElementsByTagName("button");
   for (const button of buttons) {
@@ -605,6 +582,31 @@ function substituteByView(textIfTrue, textIfFalse) {
         return textIfFalse;
     }
 }
+
+String.prototype.removeStringDup = function (stringToRemove) {
+    var output = this;
+    while (output.includes(stringToRemove + stringToRemove)) {
+        output = output.replaceAll(stringToRemove + stringToRemove, stringToRemove);
+    }
+    return output;
+};
+
+String.prototype.trimNewLines = function () {
+    var output = this;
+    while (output.charCodeAt(0) == 10) {
+        output = output.substring(1, output.length);
+    }
+    while (output.charCodeAt(output.length-1) == 10) {
+        output = output.substring(0, output.length-1);
+    }
+    while (output.charCodeAt(0) == 13) {
+        output = output.substring(1, output.length);
+    }
+    while (output.charCodeAt(output.length-1) == 13) {
+        output = output.substring(0, output.length-1);
+    }
+    return output;
+};
 
 
 // STOCK NOTICE
