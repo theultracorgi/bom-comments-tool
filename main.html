@@ -226,8 +226,10 @@
 
           </div>
         </div>
+
+        
         <!--PACKAGING DISCREPANCY-->
-        <div id="pkd" style="display: inherit;">
+       <!-- <div id="pkd" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined h2-icon">
               mail
@@ -241,6 +243,8 @@
             </button>
 
           </div>
+
+          
           <div class="inline-input-parent">
             <input id="charDiscrepancy" placeholder="Difference" class="stacked-input"
               style="width:20%; margin-right: 2px;">
@@ -259,7 +263,7 @@
               <option value="Tube">Tube</option>
             </select>
           </div>
-        </div>
+        </div> -->
         <!--QUOTED AS SUPPLIED-->
         <div id="qas" style="display: inherit;">
 
@@ -512,6 +516,24 @@
           <input id="addedAltPackageInput" placeholder="Alternate PN" class="stacked-input">
         </div>
 
+        <!--ADDED PART NUMBER ALIAS-->
+         <div id="apl" style="display: inherit;">
+          <div class="note-header">
+            <span class="material-icons-outlined h2-icon">
+              playlist_add
+            </span>
+            <h2 onclick="onAddedPartNumberAliasTitle">Added Part Number Alias</h2>
+            <button class="copy-button" onclick="onAddedPartNumberAliasClick(addedPartNumberAliasInput)">
+              <span class="material-icons-outlined h2-icon">
+                content_copy
+              </span>
+              COPY
+            </button>
+
+          </div>
+          <input id="addedPartNumberAliasInput" placeholder="Part Number Alias" class="stacked-input">
+        </div>
+
         <!--LABELING BOM MISMATCH-->
         <div id="lbm" style="display: inherit;">
           <div class="note-header">
@@ -694,6 +716,62 @@
       </button>
     </div>
 
+  
+    <div id="attrition" class="favorite-notes-content">
+      <!--ATTRITION CALCULATOR-->
+      <div class="page-header">Attrition Calculator</div>
+      <!--INITIALS-->
+      <div class="note-header">
+        <span class="material-symbols-outlined h2-icon">
+          deployed_code
+        </span>
+        <h2>Package Size</h2>
+        <input id="attritionPackageType" list="packageTypes" class="inline-input-adv" required placeholder="Package">
+          <datalist id="packageTypes">
+            <option value="01005">
+            <option value="0201">
+            <option value="0402">
+            <option value="0603">
+            <option value="0805">
+            <option value="1206">
+            <option value="1210">
+            <option value="1217">
+            <option value="2010">
+            <option value="2020">
+            <option value="2045">
+            <option value="2512">
+            <option value="SOD-123">
+            <option value="SOD-128">
+            <option value="SOD-123">
+            <option value="SOD-223">
+            <option value="SOT-89(TO-243)[35](SC-62)">
+            <option value="SOT-23(TO-236-2)(SC-59)">
+            <option value="SOT-323(SC-70)">
+            <option value="SOT416(SC-75)">
+            <option value="SOT-663">
+            <option value="SOT-723">
+            <option value="SOT-883">
+            <option value="TVS Diode">
+            <option value="0201/0402 LED">
+            <option value="Micro BGA/LGA">
+          </datalist>
+      </div>
+
+      <div class="note-header">
+        <span class="material-icons-outlined h2-icon">
+          tag
+        </span>
+        <h2>Needed QTY</h2>
+        <input id="attritionQTY" class="inline-input-adv" required placeholder="Need">
+          
+      </div>
+      
+      
+     
+      
+      
+    </div>
+
     <div id="settings" class="favorite-notes-content">
       <!--SETTINGS-->
       <div class="page-header">CONFIGURATION</div>
@@ -736,6 +814,7 @@
         <!--  <option value="etk">ETK</option>-->
           <option value="custresponse">Response</option>
           <option value="incoming">Incoming</option>
+          <option value="cchristophersen">cchristophersen</option>
           <option value="custom">Custom</option>
         </select>
       </div>
@@ -806,6 +885,15 @@
           </span>
           <div class="tab-label">Stock Notice</div>
         </a></li>
+      <!--ATTRITION CALCULATOR-->
+      <li style="width:33%;"><a id="attrition-button" class="bottom-nav-bar-item" href="#attrition"
+        onclick="onTabClick(navBarLabel, 'Attrition')">
+
+        <span class="material-icons">
+          percent
+        </span>
+        <div class="tab-label">Attrition</div>
+      </a></li>
       <!--SETTINGS-->
       <li style="width:33%;"><a id="settings-button" class="bottom-nav-bar-item" href="#settings"
           onclick="onTabClick(navBarLabel, 'Settings')">
@@ -815,6 +903,7 @@
           </span>
           <div class="tab-label">Settings</div>
         </a></li>
+      
     </ul>
   </div>
   <script async src="renderer.js"></script>

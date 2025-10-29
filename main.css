@@ -15,6 +15,7 @@ ITEM OPACITY
   @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
   
+  
   :root {
       --surface: white;
       --emphasis-on-primary-high: white;
@@ -162,10 +163,7 @@ ITEM OPACITY
   }
   
     /*content */
-  
-  @import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;500;600&display=swap');
-  @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-  
+
   h2, h4, label {
       font-family: 'Work Sans';
       font-weight: 500;

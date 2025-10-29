@@ -5,6 +5,7 @@ var allOptions;
 var mkePreset;
 var custResponsePreset;
 var salesOrderPreset;
+var cchristophersenPreset;
 var numWidgetSlots;
 var quoteWidgets;
 var salesorderWidgets;
@@ -30,6 +31,7 @@ allOptions = [ //List of all current widgets and associated tickers. THIS IS THE
     ["Customer Approval", "afc"],
     ["Sourcing From Inventory", "sfi"],
     ["Customer Supplied", "cts"],
+    ["Added Part Number Alias", "apl"],
     //Receiving Mode
     ["Rec'd Alternate", "rca"],
     ["Unprotected MSL", "msl"],
@@ -91,6 +93,19 @@ incomingPreset = [
     
 ];
 
+cchristophersenPreset = [
+
+    ["<BLANK>", "dum"], 
+    ["No Stock", "nsk"],
+    ["EU Stock", "eus"],
+    ["P/N Not Found", "pnf"],
+    ["Quoted with Alternate", "qwa"],
+    ["Low Stock", "lst"],
+    ["Stock with Lead Time", "swl"],
+    ["Spec/BOM Desc Mismatch", "sbm"],
+    ["Added Part Number Alias", "apl"],
+];
+
 numWidgetSlots = 8;
 
 
@@ -129,6 +144,8 @@ var pricingParseWindow = false;
 const upscaler = new Upscaler();
 async function onPricingFormatClick() {
 
+    var tariffValue;
+
     document.getElementById("pricingFormatIcon").innerHTML = "more_horiz"; 
     var rawBlobText;
      // Get the data of clipboard
@@ -152,7 +169,7 @@ async function onPricingFormatClick() {
        console.log("Upscaling...");
        const objectURL2x = await upscaler.upscale(objectURL, {
         patchSize: 128,
-        padding: 2,
+        padding: 4,
       });
        console.log("Upscale Success");
       
@@ -160,7 +177,7 @@ async function onPricingFormatClick() {
             await worker.loadLanguage('eng');
             await worker.initialize('eng');
             await worker.setParameters({
-              tessedit_char_whitelist: '0123456789.,$+: ',
+              tessedit_char_whitelist: '0123456789.,$+%: tarfPce™',
               tessedit_pageseg_mode: 4, //idk this is the best one. 12
             });
   
@@ -195,8 +212,25 @@ async function onPricingFormatClick() {
      ["$$", "$"],
      ["$", rowDelimiter + "$"]   
     ];
+
+    
+
     for(var i = 0; i < priceBreakSubArray.length; i++) {
         rawBlobText = rawBlobText.replaceAll(priceBreakSubArray[i][0],priceBreakSubArray[i][1]);
+    }
+
+    if (rawBlobText.includes("tarff")) {
+        tariffValue = rawBlobText.substring(rawBlobText.indexOf('tarff f ')+10,rawBlobText.indexOf("%")-1);
+        console.log("Tariff exists. Is " + tariffValue);
+
+        console.log("First Price Break is: " + rawBlobText.substring(rawBlobText.lastIndexOf("Prce")+5,rawBlobText.lastIndexOf("Prce")+6));
+
+        if(isNaN(Number(rawBlobText.substring(rawBlobText.lastIndexOf("Prce")+5,rawBlobText.lastIndexOf("Prce")+6)))) {
+           rawBlobText =  rawBlobText.substring(rawBlobText.lastIndexOf("Prce")+6).substring(rawBlobText.substring(rawBlobText.lastIndexOf("Prce")+6).indexOf(String.fromCharCode(10)));
+           console.log(rawBlobText);
+        } else {
+            rawBlobText =  rawBlobText.substring(rawBlobText.lastIndexOf("Prce")+5);
+        }
     }
      rawBlobText = rawBlobText.removeStringDup("$");
      rawBlobText = rawBlobText.removeStringDup(rowDelimiter);
@@ -285,7 +319,13 @@ function onLoadoutPresetChange() {
             }
             
             hideEmptyWidgets();
-            break;    
+            break;  
+            case 'cchristophersen':
+            for (var i = 1; i < cchristophersenPreset.length; i++) { //no clue why i dont need to add 1 to the length, i think it has something to do with the dummy
+                document.getElementById(`widget${i}`).appendChild(document.getElementById(cchristophersenPreset[i][1]));
+            }
+            hideEmptyWidgets();
+            break;  
         case 'custom':
             document.getElementById('custom-config').style.display = "block";
             for (var i = 1; i < numWidgetSlots +1; i++) {
@@ -1026,6 +1066,12 @@ function onDidntReceiveLineClick() {
 function onAddedAltPackageClick(alternate) {
     if (hasValidInputs([alternate])) {
         navigator.clipboard.writeText(getNotePrefix() + `Added ${alternate.value}` + appendOtherNotes("Fav"));
+    }
+}
+
+function onAddedPartNumberAliasClick(partNumberAlias) {
+    if (hasValidInputs([partNumberAlias])) {
+        navigator.clipboard.writeText(getNotePrefix() + `Added alias ${partNumberAlias.value}` + appendOtherNotes("Fav"));
     }
 }
 
