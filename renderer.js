@@ -109,13 +109,13 @@ cchristophersenPreset = [
 numWidgetSlots = 8;
 
 
-quoteWidgets = [
+quoteWidgets = [ //TODO: Remind me to figure out what this is for. Wait no i figured it out this is the advanced notes, some of the options don't apply when you're purchasing a BOM
 'costInclusionDiv',
 'requiresApprovalDiv',
 'higherQTYLT'
 
 ];
-salesorderWidgets = [
+salesorderWidgets = [ // couldn't tell you what this is for
     
 ];
 
@@ -255,6 +255,10 @@ async function onPricingFormatClick() {
 
     output = output.removeStringDup(rowDelimiter);
     output.trimNewLines();
+
+    if(tariffValue !== undefined){
+        output = output + "TariffP	" + tariffValue;
+    }
 
     try {
         await navigator.clipboard.writeText(output)
