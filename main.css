@@ -45,6 +45,7 @@ ITEM OPACITY
   
   
       --error: rgb(176, 0, 32);
+      --tooltip-background: rgb(155,155,155);
   
   }
   
@@ -317,9 +318,13 @@ ITEM OPACITY
       width: 15em; display:flex;
   }
   
-  .stacked-input {
+   .stacked-input-tooltip,  .stacked-input {
       margin: .125em 0em .125em 2em;
       display: block;
+  }
+   .stacked-input-tooltip {
+      width: 6em;
+      margin: .5em;
   }
   
   input:active, select:active, input:focus, select:focus {
@@ -457,10 +462,11 @@ ITEM OPACITY
     }
   
     /*end of stuff i understand minimally and just copied from the internet*/
-  button {
+ /* button {
       overflow: hidden;
       position: relative;
-  }
+  } */
+  /*sike we're so back i have no idea what button overflow does8? */
   
   .copy-adv-fab {
         display: flex;
@@ -508,3 +514,45 @@ ITEM OPACITY
         margin:0px;
         overflow: hidden;
        }
+
+
+
+
+
+.tariff-tooltip-container {
+  /* The container must be relatively positioned so the absolutely positioned tooltip is relative to it */
+  position: relative;
+  display: inline-block;
+        margin-left: auto;
+}
+
+.tariff-tooltip-container .tariff-tooltip {
+  /* Hide the tooltip by default */
+  visibility: hidden;
+  
+  /* Styling for the tooltip box */
+  background-color: var(--tooltip-background);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 5000;
+  bottom: -11.5em; /* Position the tooltip below the element (adjust as needed for height) */
+  left: 50%; /* Center the tooltip horizontally relative to its container */
+  transform: translateX(-50%); /* Adjust for the tooltip's width to truly center it */
+  
+  /* Add a fade-in transition effect */
+  transition: opacity 0.3s;
+}
+.tariff-tooltip {
+    display: block;
+    box-shadow: .1875em .375em .375em #888888;
+}
+
+/* Show the tooltip when hovering over the container 
+.tariff-tooltip-container:hover .tariff-tooltip {
+  visibility: visible;
+  opacity: 1;
+}*/
