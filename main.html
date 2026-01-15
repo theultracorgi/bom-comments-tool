@@ -10,17 +10,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,0" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,300,0,0" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js" type="text/javascript"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" type="text/javascript"></script>
-<!-- v4 -->
-<script src='https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js'></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@upscalerjs/default-model@latest/dist/umd/index.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/upscaler@latest/dist/browser/umd/upscaler.min.js"></script>
+  <!-- v4 -->
+  <script src='https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@upscalerjs/default-model@latest/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/upscaler@latest/dist/browser/umd/upscaler.min.js"></script>
 
 
- 
+
   <script>
     $(document).ready(function () {
       $("#tabs").tabs({ active: 'favorite-notes' });
@@ -40,22 +41,41 @@
       <h1 id="navBarLabel" style="justify-content: flex-start;" onclick="temp()">Favorites</h1>
     </div>
 
-    
 
-    
-    <button class="navBarIcons" id="octopartLookup" oncontextmenu="onWebLookupClick('https:\/\/octopart.com\/search?q=', true, ''); return false"
+
+
+    <button class="navBarIcons" id="octopartLookup"
+      oncontextmenu="onWebLookupClick('https:\/\/octopart.com\/search?q=', true, ''); return false"
       onclick="onWebLookupClick('https:\/\/octopart.com\/search?q=', false, '')">
       <span id="octopartLookupIcon" class="material-icons">
         filter_8
       </span>
     </button>
+    <div class="tariff-tooltip-container">
+      <button class="navBarIcons" id="octopartLookup" onclick="onPricingFormatClick()">
+        <span id="pricingFormatIcon" class="material-icons">
+          format_list_numbered
+        </span>
 
-    <button class="navBarIcons" id="octopartLookup" onclick="onPricingFormatClick()">
-      <span id="pricingFormatIcon" class="material-icons">
-        format_list_numbered
-      </span>
-    </button>
-  <!--   <button class="navBarIcons" id="findchipsLookup" oncontextmenu="onWebLookupClick('https:\/\/www.oemstrade.com\/search\/', true, ''); return false"
+      </button>
+      <div id="tariffTooltip" class=" tariff-tooltip">
+        <div class="page-header" style="margin-top: .50em">TARIFF ADDER</div>
+        <input id="tariffTooltipPercent" placeholder="% Percent" class="stacked-input-tooltip">
+        <div class="page-header">OR</div>
+        <input id="tariffTooltipRawCost" placeholder="Raw Cost" class="stacked-input-tooltip">
+        <input id="tariffTooltipTariffCost" placeholder="Tariff Cost" class="stacked-input-tooltip">
+        <div style="margin:.125em; display: inline-block;">
+          <button style= "color:white" class="navBarIcons copy-button" id="tariffTooltipSubmit" onclick="onTariffSubmitClick(tariffTooltipPercent, tariffTooltipRawCost, tariffTooltipTariffCost)">SUBMIT&nbsp;
+            <span class="material-icons">
+              send
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <!--   <button class="navBarIcons" id="findchipsLookup" oncontextmenu="onWebLookupClick('https:\/\/www.oemstrade.com\/search\/', true, ''); return false"
       onclick="onWebLookupClick(false)">
       <span id="octopartLookupIcon" class="material-icons">
         filter_8
@@ -71,7 +91,7 @@
       <span class="material-icons">
         backspace
       </span>
-    </button> 
+    </button>
   </div>
 
 
@@ -82,7 +102,7 @@
 
       <div id="widgetHolder" style="display: none;">
 
-        
+
         <!--NO STOCK-->
         <div id="nsk" style="display: inherit;">
           <div class="note-header">
@@ -100,7 +120,7 @@
           </div>
           <input id="noStockInput" placeholder="Reason pricing N/A (if app)" class="stacked-input">
         </div>
-        
+
         <!--EU STOCK-->
         <div id="eus" style="display: inherit;">
           <div class="note-header">
@@ -227,9 +247,9 @@
           </div>
         </div>
 
-        
+
         <!--PACKAGING DISCREPANCY-->
-       <!-- <div id="pkd" style="display: inherit;">
+        <!-- <div id="pkd" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined h2-icon">
               mail
@@ -402,8 +422,8 @@
           <input id="recdAlternateInput" placeholder="Alternate PN" class="stacked-input">
         </div>
 
-         <!--UNPROTECTED MSL-->
-         <div id="msl" style="display: inherit;">
+        <!--UNPROTECTED MSL-->
+        <div id="msl" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined h2-icon" id="mslLevelIcon" onclick="onMSLIconClick()">
               remove_moderator
@@ -450,8 +470,8 @@
           </div>
         </div>
 
-         <!--SHORT PARTS-->
-         <div id="shp" style="display: inherit;">
+        <!--SHORT PARTS-->
+        <div id="shp" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined h2-icon">
               percent
@@ -466,8 +486,8 @@
           </div>
         </div>
 
-         <!--REC'D EXACT QTY-->
-         <div id="eqt" style="display: inherit;">
+        <!--REC'D EXACT QTY-->
+        <div id="eqt" style="display: inherit;">
           <div class="note-header">
             <span class="material-symbols-outlined">
               equal
@@ -498,8 +518,8 @@
           </div>
         </div>
 
-         <!--ADDED ALT PACKAGE-->
-         <div id="aap" style="display: inherit;">
+        <!--ADDED ALT PACKAGE-->
+        <div id="aap" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined h2-icon">
               playlist_add
@@ -517,7 +537,7 @@
         </div>
 
         <!--ADDED PART NUMBER ALIAS-->
-         <div id="apl" style="display: inherit;">
+        <div id="apl" style="display: inherit;">
           <div class="note-header">
             <span class="material-icons-outlined h2-icon">
               playlist_add
@@ -716,7 +736,7 @@
       </button>
     </div>
 
-<!--
+    <!--
     <div id="attrition" class="favorite-notes-content">
       <--ATTRITION CALCULATOR--
       <div class="page-header">Attrition Calculator</div>
@@ -811,7 +831,7 @@
           <option value="quote">Quote</option>
           <option value="salesorder">Sales Order</option>
           <option value="mke">MKE</option>
-        <!--  <option value="etk">ETK</option>-->
+          <!--  <option value="etk">ETK</option>-->
           <option value="custresponse">Response</option>
           <option value="incoming">Incoming</option>
           <option value="cchristophersen">cchristophersen</option>
@@ -821,7 +841,6 @@
       <div id="custom-config" style="width: 100%; display: none;">
         <div class="page-header" style="margin-top: 1em; margin-bottom: .25em;">CUSTOM LOADOUT</div>
         <div id="custom-config-wrapper"></div>
-
       </div>
       <!--COPY BUTTON-->
       <button id="copyExportLegend" class="copy-adv-fab" onclick="onCopyExportLegendClick()">
@@ -836,7 +855,9 @@
     <table id="exportLegend" style="border: 2px solid black; display:none">
 
       <style>
-        table, th, td {
+        table,
+        th,
+        td {
           border: 1pt solid black;
           font-weight: bolder;
           font-family: 'Calibri';
@@ -862,6 +883,7 @@
         <td style="background-color:#E7E6E6; border-top: none; border-bottom: none;"></td>
       </tr>
     </table>
+
 
 
 
@@ -903,11 +925,11 @@
           </span>
           <div class="tab-label">Settings</div>
         </a></li>
-      
+
     </ul>
   </div>
   <script async src="renderer.js"></script>
- <!-- <script async defer src="stock-notice.js"></script>
+  <!-- <script async defer src="stock-notice.js"></script>
   <script async defer src="favorites.js"></script> -->
 
 
