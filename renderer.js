@@ -289,7 +289,7 @@ async function onTariffSubmitClick(tariffTooltipPercent, tariffTooltipRawCost, t
         if (tariffTooltipPercent.value != "") {
             tariffValue = rowDelimiter + "TariffP" + rowDelimiter + +tariffTooltipPercent.value;
         } else if (tariffTooltipRawCost.value != "" && tariffTooltipTariffCost.value != "") {
-            tariffValue = rowDelimiter + "TariffP" + rowDelimiter + (+tariffTooltipTariffCost.value / +tariffTooltipRawCost.value)*100;
+            tariffValue = rowDelimiter + "TariffP" + rowDelimiter + Math.round((+tariffTooltipTariffCost.value / +tariffTooltipRawCost.value)*100);
         } 
         console.log(priceBreakArray[0][1])
 
